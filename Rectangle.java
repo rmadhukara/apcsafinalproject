@@ -19,6 +19,16 @@ public class Rectangle
 		size = s;
 	}
 
+
+	public void setSize(int s){
+		size = s;
+	}
+
+	public int getSize(){
+		return size;
+	}
+
+
 	public void draw(Graphics window, int xPos, int yPos, Color col){
 		window.setColor(col);
 		window.fillRect(xPos, yPos, size, size);
