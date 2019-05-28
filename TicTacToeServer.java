@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 /**
  * A server for a multi-player tic tac toe game. Loosely based on an example in
@@ -29,9 +30,9 @@ import java.util.concurrent.Executors;
 public class TicTacToeServer {
 
     public static void main(String[] args) throws Exception {
-        try (var listener = new ServerSocket(58901)) {
+        try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("Tic Tac Toe Server is Running...");
-            var pool = Executors.newFixedThreadPool(200);
+            ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
                 Game game = new Game();
                 pool.execute(game.new Player(listener.accept(), 'X'));
@@ -124,7 +125,7 @@ class Game {
 
         private void processCommands() {
             while (input.hasNextLine()) {
-                var command = input.nextLine();
+                String command = input.nextLine();
                 if (command.startsWith("QUIT")) {
                     return;
                 } else if (command.startsWith("MOVE")) {
