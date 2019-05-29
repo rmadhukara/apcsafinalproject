@@ -22,8 +22,8 @@ public class Filler implements KeyListener, Runnable
   private int color;    //The Current Color to be used
 
   private Player[] players;   //Stores Players Here
-  private int[][] grid;
-  private boolean[] keys;   //The 1-6 BUTTONS
+  private Block[][] grid;    //Stores The Grid Blocks
+  private boolean[][] changed;    //If a Square was modified
 
   //SET VARIABLES WON'T CHANGE
   private static final int HEIGHT = 600;
@@ -43,38 +43,39 @@ public class Filler implements KeyListener, Runnable
     player2 = new Player();
     Gameboard board = new GameBoard();
     keys = new boolean[6];
-    
-    
-    grid = board.getBoard();    //Need to Change this, grid values
+    grid = board.getGrid();
+    changed = new boolean[8][7];
+
     players = new Player[2];
     players[0] = new Player(grid[7][0].getColor());
     player[1] = new Player(grid[0][6].getColor());
+
     total_Count = 2;
     currentPlayer = 0;
-
-    this.addKeyListener(this);
-    new Thread(this).start();
   }
 
-  public void game()
+  public void game(char userInput)
   {
     if(currentPlayer > 1)
       currentPlayer = 0;
     //Make sure game is still running
     if(playing && total_Count<56)
     {
-      grid = board.getBoard();    //GETTING BOARD VALUES
+      grid = board.getGrid();    //GETTING BOARD VALUES
 
       //DETERMINE WHAT COLOR THE USER SELECTED
-      do
-      {
-        for(int i = 0; i < keys.length; i++)
-        {
-          if(keys[i])
-            color = i;
-        }
-      }while(COLORS[i].equals(players[0].getColor()) &&
-             COLORS[i].equals(players[1].getColor()));
+      if(userInput == '1')
+        color = 1;
+      else if(userInput == '2')
+        color = 2;
+      else if(userInput == '3')
+        color = 3;
+      else if(userInput == '4')
+        color = 4;
+      else if(userInput == '5')
+        color = 5;
+      else
+        color = 6;
 
       players[currentPlayer].setColor(COLORS[color]);
 
@@ -87,18 +88,20 @@ public class Filler implements KeyListener, Runnable
             if(grid[r][c].getColor.equals(
                 players[currentPlayer].getColor()))
             {
-              //CHECKING IF ADJACENT COLOR IS SAME
-              if((grid[r-1][c].getControl == (currentPlayer+1)
-              ||grid[r-1][c-1].getControl == (currentPlayer+1)
-              ||grid[r-1][c+1].getControl == (currentPlayer+1)
-              ||grid[r][c-1].getControl == (currentPlayer+1)
-              ||grid[r][c+1].getControl == (currentPlayer+1)
-              ||grid[r+1][c-1].getControl == (currentPlayer+1)
-              ||grid[r+1][c].getControl == (currentPlayer+1)
-              ||grid[r+1][c+1].getControl == (currentPlayer+1))
+              //CHECKING IF ADJACENT COLOR IS SAME AND WAS AN ORIGINAL BLOCK
+              if(
+      (grid[r-1][c].getStatus() == (currentPlayer+1)&&!changed[r-1][c]) ||
+      (grid[r-1][c-1].getStatus() == (currentPlayer+1)&&!changed[r-1][c-1]) ||
+      (grid[r-1][c+1].getStatus() == (currentPlayer+1)&&!changed[r-1][c+1]) ||
+      (grid[r][c-1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
+      (grid[r][c+1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
+      (grid[r+1][c-1].getStatus() == (currentPlayer+1)&&!changed[r+1][c-1]) ||
+      (grid[r+1][c].getStatus() == (currentPlayer+1)&&!changed[r+1][c])  ||
+      (grid[r+1][c+1].getStatus() == (currentPlayer+1)&&!changed[r+1][c+1])
+      )
               {
-                grid[r][c].setControl(currentPlayer+1);
-                total_Count ++;
+                changed[r][c] = true;
+                grid[r][c].setStatus(currentPlayer+1);
                 players[currentPlayer].setControlCount(players[currentPlayer].getControlCount() + 1);
               }
             }
@@ -111,17 +114,21 @@ public class Filler implements KeyListener, Runnable
       {
         for(int col = 0; col < grid[0].length; col++)
         {
-          if(grid[row][col].getControl == (currentPlayer+1))
+          if(grid[row][col].getStatus() == (currentPlayer+1))
           {
-            grid.setColor(players[currentPlayer].getColor());
+            //CHANGING ALL OWNED SQUARE TO CORRECT COLOR
+            grid[row][col].setColor(players[currentPlayer].getColor());
           }
+          //RESET CHANGED
+          changed[row][col] = false;
         }
       }
 
-      //SENDING UPDATES TO GAMEBOARD
-      board.update(grid);
-      
+      //UPDATE TOTAL CONTROLLED
+      total_Count = players[0].getControlCount() + players[1].getControlCount();
 
+      //SENDING UPDATES TO GAMEBOARD
+      board.setGrid(grid);
       //CHECKING THAT IT ISN'T OVER BOARD
       if(total_Count >=56)
         playing = false;
