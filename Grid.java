@@ -27,8 +27,23 @@ public class Grid
 	}
 
 
+	public void setGrid(Block[][] g){
+		grid = g;
+	}
+
+
 	public Block[][] getGrid(){
 		return grid;
+	}
+
+
+	public void draw(Graphics window){
+		for(int row = 0; row < 8; row++){
+			for(int col = 0; col < 7; col++){
+				//grid[row][col].draw();
+
+			}
+		}
 	}
 
 

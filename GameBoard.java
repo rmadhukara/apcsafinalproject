@@ -7,21 +7,18 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.util.*;
 
-public class GameBoard
+public class GameBoard extends Grid
 {
 
-	private Grid grid;
 	private Rectangle box;
 
 	public GameBoard(){
-
-		grid = new Grid();
 		box = new Rectangle();
 	}
 
 
-	public Block[][] getBoard(){
-		return grid.getGrid();
+	public void drawGrid(Graphics window){
+
 	}
 
 	public void drawScoreBoard(Graphics window){
@@ -41,12 +38,38 @@ public class GameBoard
 	}
 
 	public void drawPanel(Graphics window){
+
+		box.setSize(7);
 		box.draw(window, 10, 300, Color.RED);
 		box.draw(window, 20, 300, Color.GREEN);
 		box.draw(window, 30, 300, Color.YELLOW);
 		box.draw(window, 40, 300, Color.BLUE);
 		box.draw(window, 50, 300, Color.MAGENTA);
 		box.draw(window, 60, 300, Color.BLACK);
+
+		Block[][] statGrid = getGrid();
+		Color oneCol = statGrid[7][0].getColor();
+		Color twoCol = statGrid[0][6].getColor();
+
+		if(oneCol != Color.RED || oneCol != Color.RED)
+			box.setSize(2);
+
+		if(oneCol != Color.GREEN || twoCol != Color.GREEN)
+			box.setSize(2);
+
+                if(oneCol != Color.YELLOW || twoCol != Color.YELLOW)
+                        box.setSize(2);
+
+                if(oneCol != Color.BLUE || twoCol != Color.BLUE)
+                        box.setSize(2);
+
+                if(oneCol != Color.MAGENTA || twoCol != Color.MAGENTA)
+                        box.setSize(2);
+
+                if(oneCol != Color.BLACK || twoCol != Color.BLACK)
+                        box.setSize(2);
+
+
 	}
 
 
