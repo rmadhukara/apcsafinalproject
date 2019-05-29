@@ -27,5 +27,10 @@ public class Grid
 	}
 
 
+	public Block[][] getGrid(){
+		return grid;
+	}
+
+
 
 } //end Grid class
