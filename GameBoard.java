@@ -19,6 +19,11 @@ public class GameBoard
 		box = new Rectangle();
 	}
 
+
+	public Block[][] getBoard(){
+		return grid.getGrid();
+	}
+
 	public void drawScoreBoard(Graphics window){
 		Scanner keyboard = new Scanner(System.in);
 
