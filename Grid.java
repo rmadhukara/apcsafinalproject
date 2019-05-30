@@ -42,7 +42,6 @@ public class Grid
 			for(int col = 0; col < 7; col++){
 				Block one = grid[row][col];
 				one.draw(window,10+(5*row),270+(5*col),one.getColor());
-
 			}
 		}
 	}

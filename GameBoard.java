@@ -17,10 +17,6 @@ public class GameBoard extends Grid
 	}
 
 
-	public void drawGrid(Graphics window){
-
-	}
-
 	public void drawScoreBoard(Graphics window){
 		Scanner keyboard = new Scanner(System.in);
 
