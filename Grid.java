@@ -37,10 +37,11 @@ public class Grid
 	}
 
 
-	public void draw(Graphics window){
+	public void drawGrid(Graphics window){
 		for(int row = 0; row < 8; row++){
 			for(int col = 0; col < 7; col++){
-				//grid[row][col].draw();
+				Block one = grid[row][col];
+				one.draw(window,10+(5*row),270+(5*col),one.getColor());
 
 			}
 		}
