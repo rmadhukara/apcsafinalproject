@@ -44,6 +44,9 @@ public class Grid
 				one.draw(window,270-(5*row),10+(5*col),one.getColor());
 			}
 		}
+		window.drawString("1", 266, 12);
+		window.drawString("2", 11, 42);
+
 	}
 
 
