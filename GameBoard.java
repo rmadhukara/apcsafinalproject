@@ -33,8 +33,9 @@ public class GameBoard extends Grid
                 window.drawString("Score: ", 40, 100);
 	}
 
-	public void drawPanel(Graphics window){
-
+	public void paint(Graphics window){
+	    super.paint(window);
+	    
 		box.setSize(7);
 		box.draw(window, 10, 300, Color.RED);
 		box.draw(window, 20, 300, Color.GREEN);
