@@ -59,7 +59,7 @@ public class Filler implements KeyListener, Runnable
     if(currentPlayer > 1)
       currentPlayer = 0;
     //Make sure game is still running
-    if(playing && total_Count<56)
+    if(playing)
     {
       grid = board.getGrid();    //GETTING BOARD VALUES
 
