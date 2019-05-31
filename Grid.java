@@ -1,4 +1,5 @@
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,7 +8,7 @@ import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Grid
+public class Grid extends Canvas
 {
 
 	private Block[][] grid;
@@ -37,7 +38,7 @@ public class Grid
 	}
 
 
-	public void drawGrid(Graphics window){
+	public void paint(Graphics window){
 		for(int row = 0; row < 8; row++){
 			for(int col = 0; col < 7; col++){
 				Block one = grid[row][col];
