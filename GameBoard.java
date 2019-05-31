@@ -34,6 +34,8 @@ public class GameBoard extends Grid
 	}
 
 	public void paint(Graphics window){
+
+		/*
 		box.setSize(15);
 		box.draw(window, 10, 300, Color.RED);
 		box.draw(window, 20, 300, Color.GREEN);
@@ -64,6 +66,7 @@ public class GameBoard extends Grid
                 if(oneCol != Color.BLACK || twoCol != Color.BLACK)
                         box.setSize(2);
 
+		*/
 
 	}
 
