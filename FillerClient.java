@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
@@ -26,12 +27,14 @@ public class FillerClient {
   private PrintWriter out;
   
   private GameBoard board;
-  private Panel[] buttons;
-  private Panel current;
+  private Component[] buttons;
+  private Component current;
+  
+  private static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   
   public FillerClient(String serverAddress) throws Exception {
       board = new GameBoard();
-      buttons = new Panel[6];
+      buttons = new Component[6];
       
       socket = new Socket(serverAddress, 58901);
       in = new Scanner(socket.getInputStream());
@@ -39,13 +42,34 @@ public class FillerClient {
 
       messageLabel.setBackground(Color.lightGray);
       frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-
+      
+      //Display Game Board
+      frame.getContentPane().add(board);
+      
+      /*
+      //Display Buttons - Attempt 2
       JPanel boardPanel = new JPanel();
       
-      boardPanel.setBackground(Color.black);
-      boardPanel.setLayout(new GridLayout(1, 6, 1, 1));
+      for (var i = 0; i < buttons.length; i++) {
+        final int j = i;
+        buttons[i] = (Component)(new Panel(colors[i], i*20, 0));
+        buttons[i].addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                current = buttons[j];
+                out.println("MOVE " + j);
+            }
+        });
+        boardPanel.add(buttons[i]);
+      }
+      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+      */
+      /*
+      //Display Buttons
+      JPanel boardPanel = new JPanel();
       
-      Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
+      //boardPanel.setBackground(Color.black);
+      boardPanel.setLayout(new GridLayout(1, 6, 10, 1));
+      
       for (var i = 0; i < buttons.length; i++) {
           final int j = i;
           buttons[i] = new Panel(colors[i]);
@@ -58,11 +82,12 @@ public class FillerClient {
           boardPanel.add(buttons[i]);
       }
       
-      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+      boardPanel.setPreferredSize(new Dimension(5, 10));
+      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);*/
   }
 
   /**
-   * Basic code from: https://cs.lmu.edu/~ray/notes/javanetexamples/
+   * Code based on: https://cs.lmu.edu/~ray/notes/javanetexamples/
    * 
    * The main thread of the client will listen for messages from the server.
    * The first message will be a "WELCOME" message in which we receive our
@@ -77,17 +102,17 @@ public class FillerClient {
           String response = in.nextLine();
           char mark = response.charAt(8);
           char opponentMark = mark == 'X' ? 'O' : 'X';
-          frame.setTitle("Tic Tac Toe: Player " + mark);
+          frame.setTitle("Filler: Player " + mark);
           while (in.hasNextLine()) {
               response = in.nextLine();
               if (response.startsWith("VALID_MOVE")) {
                   messageLabel.setText("Valid move, please wait");
-                  current.setText(mark);
-                  current.repaint();
+                  //current.setText(mark);
+                  //current.repaint();
               } else if (response.startsWith("OPPONENT_MOVED")) {
                   var loc = Integer.parseInt(response.substring(15));
-                  buttons[loc].setText(opponentMark);
-                  buttons[loc].repaint();
+                  //buttons[loc].setText(opponentMark);
+                  //buttons[loc].repaint();
                   messageLabel.setText("Opponent moved, your turn");
               } else if (response.startsWith("MESSAGE")) {
                   messageLabel.setText(response.substring(8));
@@ -114,10 +139,6 @@ public class FillerClient {
           frame.dispose();
       }
   }
-  
-  public void paint(Graphics window) {
-    board.drawScoreBoard(window);
-  }
 
   public static void main(String[] args) throws Exception {
       if (args.length != 1) {
@@ -125,16 +146,8 @@ public class FillerClient {
           return;
       }
       FillerClient client = new FillerClient(args[0]);
-      
-      GameBoard theGame = new GameBoard();
-      ((Component)GameBoard).setFocusable(true);
-
-      getContentPane().add(theGame);
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setVisible(true);
-      
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      client.frame.setSize(320, 320);
+      client.frame.setSize(500, 500);
       client.frame.setVisible(true);
       client.frame.setResizable(false);
       client.play();
