@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 
+<<<<<<< HEAD
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -20,3 +21,9 @@ public class Panel extends JPanel {
       label.setText(text + "");
   }
 }
+=======
+public static class Panel extends JPanel
+{
+
+}
+>>>>>>> ce843c2179415b5de5bf1ca492e44a05925d210b

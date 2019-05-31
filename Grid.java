@@ -27,8 +27,26 @@ public class Grid
 	}
 
 
+	public void setGrid(Block[][] g){
+		grid = g;
+	}
+
+
 	public Block[][] getGrid(){
 		return grid;
+	}
+
+
+	public void drawGrid(Graphics window){
+		for(int row = 0; row < 8; row++){
+			for(int col = 0; col < 7; col++){
+				Block one = grid[row][col];
+				one.draw(window,270-(5*row),10+(5*col),one.getColor());
+			}
+		}
+		window.drawString("1", 266, 12);
+		window.drawString("2", 11, 42);
+
 	}
 
 
