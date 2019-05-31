@@ -9,6 +9,7 @@ CLASSES = \
 	Block.java \
 	Grid.java \
 	GameBoard.java \
+	#Panel.java \
 	#Filler.java \
 	#Player.java \
 	#Playerable.java \
