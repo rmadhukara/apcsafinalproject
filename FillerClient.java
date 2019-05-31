@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -24,12 +26,12 @@ public class FillerClient {
   private PrintWriter out;
   
   private GameBoard board;
-  private Square[] buttons;
-  private Square current;
+  private Panel[] buttons;
+  private Panel current;
   
   public FillerClient(String serverAddress) throws Exception {
       board = new GameBoard();
-      buttons = new Square[6];
+      buttons = new Panel[6];
       
       socket = new Socket(serverAddress, 58901);
       in = new Scanner(socket.getInputStream());
@@ -46,7 +48,7 @@ public class FillerClient {
       Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
       for (var i = 0; i < buttons.length; i++) {
           final int j = i;
-          buttons[i] = new Square(colors[i]);
+          buttons[i] = new Panel(colors[i]);
           buttons[i].addMouseListener(new MouseAdapter() {
               public void mousePressed(MouseEvent e) {
                   current = buttons[j];
@@ -113,24 +115,9 @@ public class FillerClient {
       }
   }
   
-  
-
-  static class Square extends JPanel {
-      JLabel label = new JLabel();
-
-      public Square(Color col) {
-          setBackground(col);
-          setLayout(new GridBagLayout());
-          label.setFont(new Font("Arial", Font.BOLD, 40));
-          add(label);
-      }
-
-      public void setText(char text) {
-          label.setForeground(text == 'X' ? Color.BLUE : Color.RED);
-          label.setText(text + "");
-      }
+  public void paint(Graphics window) {
+    board.drawScoreBoard(window);
   }
-  
 
   public static void main(String[] args) throws Exception {
       if (args.length != 1) {
@@ -138,6 +125,14 @@ public class FillerClient {
           return;
       }
       FillerClient client = new FillerClient(args[0]);
+      
+      GameBoard theGame = new GameBoard();
+      ((Component)GameBoard).setFocusable(true);
+
+      getContentPane().add(theGame);
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setVisible(true);
+      
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       client.frame.setSize(320, 320);
       client.frame.setVisible(true);
