@@ -66,6 +66,8 @@ public class Player implements Playerable, Runnable
     controlCount = x;
   }
 
+  //The following code is adapted from https://cs.lmu.edu/~ray/notes/javanetexamples/#tictactoe
+
   //Override from Runnable
   public void run() 
   {
@@ -82,7 +84,7 @@ public class Player implements Playerable, Runnable
     {
       if (opponent != null && opponent.output != null) 
       {
-          opponent.output.println("OTHER_PLAYER_LEFT");
+        opponent.output.println("OTHER_PLAYER_LEFT");
       }
       try 
       {
@@ -97,13 +99,16 @@ public class Player implements Playerable, Runnable
     input = new Scanner(socket.getInputStream());
     output = new PrintWriter(socket.getOutputStream(), true);
     output.println("WELCOME " + mark);
-    if (mark == 'X') {
-        currentPlayer = this;
-        output.println("MESSAGE Waiting for opponent to connect");
-    } else {
-        opponent = currentPlayer;
-        opponent.opponent = this;
-        opponent.output.println("MESSAGE Your move");
+    if (mark == 'X') 
+    {
+      currentPlayer = this;
+      output.println("MESSAGE Waiting for opponent to connect");
+    } 
+    else 
+    {
+      opponent = currentPlayer;
+      opponent.opponent = this;
+      opponent.output.println("MESSAGE Your move");
     }
   }
 
