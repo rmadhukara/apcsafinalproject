@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,30 +45,12 @@ public class FillerClient {
       frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
       
       //Display Game Board
+      board.setBounds(0,0,500,390);
       frame.getContentPane().add(board);
-      
-      /*
-      //Display Buttons - Attempt 2
-      JPanel boardPanel = new JPanel();
-      
-      for (var i = 0; i < buttons.length; i++) {
-        final int j = i;
-        buttons[i] = (Component)(new Panel(colors[i], i*20, 0));
-        buttons[i].addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                current = buttons[j];
-                out.println("MOVE " + j);
-            }
-        });
-        boardPanel.add(buttons[i]);
-      }
-      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
-      */
-      /*
+
       //Display Buttons
       JPanel boardPanel = new JPanel();
       
-      //boardPanel.setBackground(Color.black);
       boardPanel.setLayout(new GridLayout(1, 6, 10, 1));
       
       for (var i = 0; i < buttons.length; i++) {
@@ -82,8 +65,7 @@ public class FillerClient {
           boardPanel.add(buttons[i]);
       }
       
-      boardPanel.setPreferredSize(new Dimension(5, 10));
-      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);*/
+      frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
   }
 
   /**
@@ -101,7 +83,7 @@ public class FillerClient {
       try {
           String response = in.nextLine();
           char mark = response.charAt(8);
-          char opponentMark = mark == 'X' ? 'O' : 'X';
+          char opponentMark = mark == '1' ? '2' : '1';
           frame.setTitle("Filler: Player " + mark);
           while (in.hasNextLine()) {
               response = in.nextLine();

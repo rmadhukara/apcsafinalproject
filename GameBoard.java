@@ -34,7 +34,7 @@ public class GameBoard extends Grid
 	}
 
 	public void paint(Graphics window){
-
+	    super.paint(window);
 		/*
 		box.setSize(15);
 		box.draw(window, 10, 300, Color.RED);

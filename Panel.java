@@ -1,5 +1,7 @@
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,24 +21,3 @@ public class Panel extends JPanel {
       label.setText(text + "");
   }
 }
-
-/* TEST FOR LATER
-public class Panel extends Canvas{
-  private Color color;
-  private int xPos;
-  private int yPos;
-  
-  public Panel(Color col, int x, int y) {
-      super();
-      color = col;
-      xPos = x;
-      yPos = y;
-  }
-  
-  public void paint(Graphics window) {
-    Rectangle box = new Rectangle();
-    box.setSize(20);
-    box.draw(window, xPos, yPos, color);
-  }
-}
-*/
