@@ -67,14 +67,17 @@ class Game {
         
     }
 
-    public synchronized void move(int location, Player player) {
+    public synchronized void move(int location, Player player) 
+    {
         if (player != currentPlayer) {
             throw new IllegalStateException("Not your turn");
-        } else if (player.opponent == null) {
+        } 
+        else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
-        } else if (board[location] != null) {
-            throw new IllegalStateException("Cell already occupied");
-        }
+        } 
+        // else if (board[location] != null) {
+        //     throw new IllegalStateException("Cell already occupied");
+        // }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
     }
