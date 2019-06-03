@@ -42,7 +42,7 @@ public class Grid extends Canvas
 		for(int row = 0; row < 8; row++){
 			for(int col = 0; col < 7; col++){
 				Block one = grid[row][col];
-				one.draw(window,270-(50*row),10+(50*col),one.getColor());
+				one.draw(window,270-(50*row)+100,10+(50*col)+20,one.getColor());
 			}
 		}
 		window.drawString("1", 12, 266);
