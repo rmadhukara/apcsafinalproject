@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -62,7 +63,7 @@ class Game {
     }
 
     public boolean boardFilledUp() {
-        // return Arrays.stream(board).allMatch(p -> p != null);
+        return Arrays.stream(board).allMatch(p -> p != null);
         
     }
 
@@ -78,7 +79,7 @@ class Game {
         currentPlayer = currentPlayer.opponent;
     }
 
-    public class Player implements Playerable, Runnable
+    public class Player implements Playerable, java.lang.Runnable
     {
       private int winCount;   //The total amount wins a player has
       private int controlCount;   //The total blocks the user controls in current game
