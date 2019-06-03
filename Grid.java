@@ -1,4 +1,5 @@
 
+import java.awt.Font;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -46,8 +47,9 @@ public class Grid extends Canvas
 			}
 		}
 		window.setColor(Color.BLACK);
-		window.drawString("1", 45, 365);
-		window.drawString("2", 455, 5);
+		window.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+		window.drawString("1", 25, 360);
+		window.drawString("2", 458, 58);
 
 	}
 
