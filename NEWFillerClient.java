@@ -124,7 +124,7 @@ public class NEWFillerClient {
                 }
                 // int[] boardInts = Integer.parseInt(turnToArray.split(" "));
                 board.setColorInGrid(boardInts);
-                  break;
+                  //break;
               }
           }
           out.println("QUIT");

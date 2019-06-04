@@ -46,11 +46,12 @@ public class NEWFillerServer {
 class Game {
 
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
-    private Player[] board = new Player[56];
+    private Player[] board = new Player[6];
 
     Player currentPlayer;
 
     public boolean hasWinner() {
+      //fix
         return (board[0] != null && board[0] == board[1] && board[0] == board[2])
             || (board[3] != null && board[3] == board[4] && board[3] == board[5])
             || (board[6] != null && board[6] == board[7] && board[6] == board[8])
@@ -63,8 +64,8 @@ class Game {
     }
 
     public boolean boardFilledUp() {
+      //fix
         return Arrays.stream(board).allMatch(p -> p != null);
-        
     }
 
     public synchronized void move(int location, Player player) 
@@ -80,6 +81,10 @@ class Game {
         // }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
+    }
+    
+    public synchronized void drawOneBoard() {
+      
     }
 
     public class Player implements Playerable, java.lang.Runnable
@@ -169,18 +174,27 @@ class Game {
       }
 
       private void setup() throws IOException 
-      {
+      {        
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream(), true);
         output.println("WELCOME " + mark);
-        output.println("BOARD_UPDATE 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1");
+        String boardInts = "";
+        
         if (mark == 'X') 
         {
+          for (int i = 0; i < 56; i++) {
+            boardInts += " " + (int)(Math.random() * 6);
+          }
+          output.println("BOARD_UPDATE" + boardInts);
+          
           currentPlayer = this;
           output.println("MESSAGE Waiting for opponent to connect");
+          
         } 
         else 
         {
+          output.println("BOARD_UPDATE" + boardInts);
+          
           opponent = currentPlayer;
           opponent.opponent = this;
           opponent.output.println("MESSAGE Your move");
