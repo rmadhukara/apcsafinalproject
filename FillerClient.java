@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class NEWFillerClient {
+public class FillerClient {
   
   private JFrame frame = new JFrame("Filler");
   private JLabel messageLabel = new JLabel("...");
@@ -32,9 +31,9 @@ public class NEWFillerClient {
   private Component[] buttons;
   private Component current;
   
-  public static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
+  private static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   
-  public NEWFillerClient(String serverAddress) throws Exception {
+  public FillerClient(String serverAddress) throws Exception {
       board = new GameBoard();
       buttons = new Component[6];
       
@@ -93,7 +92,7 @@ public class NEWFillerClient {
                   //current.setText(mark);
                   //current.repaint();
               } else if (response.startsWith("OPPONENT_MOVED")) {
-                  int loc = Integer.parseInt(response.substring(15));
+                  var loc = Integer.parseInt(response.substring(15));
                   //buttons[loc].setText(opponentMark);
                   //buttons[loc].repaint();
                   messageLabel.setText("Opponent moved, your turn");
@@ -110,20 +109,6 @@ public class NEWFillerClient {
                   break;
               } else if (response.startsWith("OTHER_PLAYER_LEFT")) {
                   JOptionPane.showMessageDialog(frame, "Other player left");
-                  break;
-              } else if (response.startsWith("BOARD_UPDATE")) {
-                  // JOptionPane.showMessageDialog(frame, "Other player left");
-                // response = in.nextLine().trim();
-                String turnToArray = response.substring(13);
-                String[] toSplit = turnToArray.split(" ");
-
-                int[] boardInts = new int[toSplit.length];
-                for (int i = 0; i < toSplit.length; i++)
-                {
-                  boardInts[i] = Integer.parseInt(toSplit[i]);
-                }
-                // int[] boardInts = Integer.parseInt(turnToArray.split(" "));
-                board.setColorInGrid(boardInts);
                   break;
               }
           }
@@ -142,7 +127,7 @@ public class NEWFillerClient {
           System.err.println("Pass the server IP as the sole command line argument");
           return;
       }
-      NEWFillerClient client = new NEWFillerClient(args[0]);
+      FillerClient client = new FillerClient(args[0]);
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       client.frame.setSize(500, 500);
       client.frame.setVisible(true);
