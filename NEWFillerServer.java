@@ -173,6 +173,7 @@ class Game {
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream(), true);
         output.println("WELCOME " + mark);
+        output.println("BOARD_UPDATE 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1");
         if (mark == 'X') 
         {
           currentPlayer = this;
