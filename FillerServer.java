@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 /**
  * A server for a multi-player tic tac toe game. Loosely based on an example in
- * Deitel and Deitel’s “Java How to Program” book. For this project I created a
+ * Deitel and Deitel's "Java How to Program" book. For this project I created a
  * new application-level protocol called TTTP (for Tic Tac Toe Protocol), which
  * is entirely plain text. The messages of TTTP are:
  *
