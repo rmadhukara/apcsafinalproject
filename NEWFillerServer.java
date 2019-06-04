@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
  *     TIE
  *     MESSAGE <text>
  */
-public class FillerServer {
+public class NEWFillerServer {
 
     public static void main(String[] args) throws Exception {
         try (ServerSocket listener = new ServerSocket(58901)) {

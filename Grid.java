@@ -38,15 +38,16 @@ public class Grid extends Canvas
 		return grid;
 	}
 
-	public void setColorInGrid(Color[] colors)
+	public void setColorInGrid(int[] colors)
 	{
 		for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				grid[i][j].setColor(colors[i*7+j]);
+				grid[i][j].setColor(NEWFillerClient.colors[colors[i*7+j]]);
 			}
 		}
+		repaint();
 	}
 
 
