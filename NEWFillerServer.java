@@ -68,6 +68,11 @@ class Game {
         return Arrays.stream(board).allMatch(p -> p != null);
     }
 
+    public synchronized void send(String intColors)
+    {
+      
+    }
+
     public synchronized void move(int location, Player player) 
     {
         if (player != currentPlayer) {
