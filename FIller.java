@@ -90,14 +90,14 @@ public class Filler implements KeyListener, Runnable
             {
               //CHECKING IF ADJACENT COLOR IS SAME AND WAS AN ORIGINAL BLOCK
               if(
-      (grid[r-1][c].getStatus() == (currentPlayer+1)&&!changed[r-1][c]) ||
-      (grid[r-1][c-1].getStatus() == (currentPlayer+1)&&!changed[r-1][c-1]) ||
-      (grid[r-1][c+1].getStatus() == (currentPlayer+1)&&!changed[r-1][c+1]) ||
-      (grid[r][c-1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
-      (grid[r][c+1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
-      (grid[r+1][c-1].getStatus() == (currentPlayer+1)&&!changed[r+1][c-1]) ||
-      (grid[r+1][c].getStatus() == (currentPlayer+1)&&!changed[r+1][c])  ||
-      (grid[r+1][c+1].getStatus() == (currentPlayer+1)&&!changed[r+1][c+1])
+      (r>0&&grid[r-1][c].getStatus() == (currentPlayer+1)&&!changed[r-1][c]) ||
+      (r>0&&c>0&&grid[r-1][c-1].getStatus() == (currentPlayer+1)&&!changed[r-1][c-1]) ||
+      (r>0&&c<7&&grid[r-1][c+1].getStatus() == (currentPlayer+1)&&!changed[r-1][c+1]) ||
+      (c>0&&grid[r][c-1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
+      (c<7&&grid[r][c+1].getStatus() == (currentPlayer+1)&&!changed[r][c+1])  ||
+      (r<8&&c<7&&grid[r+1][c-1].getStatus() == (currentPlayer+1)&&!changed[r+1][c-1]) ||
+      (r<8&&grid[r+1][c].getStatus() == (currentPlayer+1)&&!changed[r+1][c])  ||
+      (r<8&&c<7&&grid[r+1][c+1].getStatus() == (currentPlayer+1)&&!changed[r+1][c+1])
       )
               {
                 changed[r][c] = true;
