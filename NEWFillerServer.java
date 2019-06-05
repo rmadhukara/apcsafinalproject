@@ -41,7 +41,33 @@ public class NEWFillerServer {
                 for (int i = 0; i < 56; i++) {
                   boardInts += " " + (int)(Math.random() * 6);
                 }
-                
+
+
+                    int[][] colorNum = new int[7][8];
+    colorNum[0][0] = (int)(Math.random()*6) + 1;
+    for(int col = 1; col < 8; col++){
+      colorNum[0][col] = (int)(Math.random()*6) + 1;
+      while(colorNum[0][col-1] == colorNum[0][col]){
+        colorNum[0][col] = (int)(Math.random()*6) + 1;
+      }
+    }
+
+    for(int row = 1; row < 7; row++){
+      colorNum[row][0] = (int)(Math.random()*6) + 1;
+      while(colorNum[row][0] == colorNum[row-1][0]){
+        colorNum[row][0] = (int)(Math.random()*6) + 1;
+      }
+    }
+
+    for(int row = 1; row < 7; row++){
+      for(int col = 1; col < 8; col++){
+        colorNum[row][col] = (int)(Math.random()*6) + 1;
+        while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1]){
+          colorNum[row][col] = (int)(Math.random()*6) + 1;
+        }
+      }
+    }
+
                 Game game = new Game(boardInts);
                 pool.execute(game.new Player(listener.accept(), '1'));
                 pool.execute(game.new Player(listener.accept(), '2'));
