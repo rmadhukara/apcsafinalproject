@@ -35,21 +35,32 @@ public class NEWFillerServer {
             System.out.println("Filler Server is Running...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
-                Game game = new Game();
-                pool.execute(game.new Player(listener.accept(), 'X'));
-                pool.execute(game.new Player(listener.accept(), 'O'));
+                //set random game board once
+                String boardInts = "";
+                for (int i = 0; i < 56; i++) {
+                  boardInts += " " + (int)(Math.random() * 6);
+                }
+                
+                Game game = new Game(boardInts);
+                pool.execute(game.new Player(listener.accept(), '1'));
+                pool.execute(game.new Player(listener.accept(), '2'));
             }
         }
     }
 }
 
 class Game {
-
+    private String boardInts;
+    
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
-    private Player[] board = new Player[6];
+    private Player[] board = new Player[56];
 
     Player currentPlayer;
-
+    
+    public Game(String nums) {
+      boardInts = nums;
+    }
+    
     public boolean hasWinner() {
       //fix
         return (board[0] != null && board[0] == board[1] && board[0] == board[2])
@@ -183,23 +194,15 @@ class Game {
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream(), true);
         output.println("WELCOME " + mark);
-        String boardInts = "";
+        output.println("BOARD_UPDATE" + boardInts);
         
-        if (mark == 'X') 
+        if (mark == '1') 
         {
-          for (int i = 0; i < 56; i++) {
-            boardInts += " " + (int)(Math.random() * 6);
-          }
-          output.println("BOARD_UPDATE" + boardInts);
-          
           currentPlayer = this;
           output.println("MESSAGE Waiting for opponent to connect");
-          
         } 
         else 
-        {
-          output.println("BOARD_UPDATE" + boardInts);
-          
+        {          
           opponent = currentPlayer;
           opponent.opponent = this;
           opponent.output.println("MESSAGE Your move");

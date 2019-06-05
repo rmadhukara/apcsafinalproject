@@ -29,14 +29,14 @@ public class NEWFillerClient {
   private PrintWriter out;
   
   private GameBoard board;
-  private Component[] buttons;
-  private Component current;
+  private Panel[] buttons;
+  private Panel current;
   
   public static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   
   public NEWFillerClient(String serverAddress) throws Exception {
       board = new GameBoard();
-      buttons = new Component[6];
+      buttons = new Panel[6];
       
       socket = new Socket(serverAddress, 58901);
       in = new Scanner(socket.getInputStream());
