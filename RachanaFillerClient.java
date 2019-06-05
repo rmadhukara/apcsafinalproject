@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class NEWFillerClient {
+public class RachanaFillerClient {
   
   private JFrame frame = new JFrame("Filler");
   private JLabel messageLabel = new JLabel("...");
@@ -34,7 +34,7 @@ public class NEWFillerClient {
   
   public static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   
-  public NEWFillerClient(String serverAddress) throws Exception {
+  public RachanaFillerClient(String serverAddress) throws Exception {
       board = new GameBoard();
       buttons = new Component[6];
       
@@ -142,7 +142,7 @@ public class NEWFillerClient {
           System.err.println("Pass the server IP as the sole command line argument");
           return;
       }
-      NEWFillerClient client = new NEWFillerClient(args[0]);
+      RachanaFillerClient client = new RachanaFillerClient(args[0]);
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       client.frame.setSize(500, 500);
       client.frame.setVisible(true);
