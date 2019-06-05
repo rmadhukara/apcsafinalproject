@@ -198,11 +198,17 @@ class Game {
         
         if (mark == '1') 
         {
-          currentPlayer = this;
+          // for (int i = 0; i < 56; i++) {
+          //   boardInts += " " + (int)(Math.random() * 6);
+          // }
+          // output.println("BOARD_UPDATE" + boardInts);
+                    currentPlayer = this;
           output.println("MESSAGE Waiting for opponent to connect");
         } 
-        else 
-        {          
+        else     
+        {
+          // output.println("BOARD_UPDATE" + boardInts);
+          
           opponent = currentPlayer;
           opponent.opponent = this;
           opponent.output.println("MESSAGE Your move");
