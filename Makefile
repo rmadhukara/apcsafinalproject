@@ -7,14 +7,13 @@ JC = javac
 CLASSES = \
 	Rectangle.java \
 	Block.java \
-	Grid.java \
 	GameBoard.java \
-	#Panel.java \
+	Panel.java \
+	#FillerClient.java \
+	#FillerServer.java
 	#Filler.java \
 	#Player.java \
 	#Playerable.java \
-	#FillerClient.java \
-	#FillerServer.java
 
 default: classes
 
