@@ -16,11 +16,13 @@ public class Grid extends Canvas
 
 	public Grid(){
 		grid = new Block[8][7];
-                for(int h = 0; h < 7; h++){
-                        for(int w = 0; w < 8; w++){
-                                grid[w][h] = new Block(50,0);
-                        }
-                }
+        for(int h = 0; h < 7; h++)
+        {
+            for(int w = 0; w < 8; w++)
+            {
+                grid[w][h] = new Block(50,0);
+            }
+        }
 
 		//setting corner blocks to Player 1 and 2 blocks
 		grid[7][0] = new Block(50,1);
@@ -47,7 +49,12 @@ public class Grid extends Canvas
 				grid[i][j].setColor(NEWFillerClient.colors[colors[i*7+j]]);
 			}
 		}
-		repaint();
+		paint();
+	}
+
+	public boolean checkAdjacencies(int color)
+	{
+
 	}
 
 

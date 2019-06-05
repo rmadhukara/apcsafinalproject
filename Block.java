@@ -11,17 +11,20 @@ public class Block extends Rectangle
 
 	private Color color;
 	private int status;
+	private boolean isFlickering;
 
 	public Block(){
 		super();
 		color = Color.BLACK;
 		status = 0;
+		isFlickering = false;
 	}
 
 	public Block(int size, int stat){
 		super(size);
 		randColor();
 		setStatus(stat);
+		isFlickering = false;
 	}
 
 	public void setStatus(int stat){
@@ -40,6 +43,10 @@ public class Block extends Rectangle
 		return color;
 	}
 
+	public void setIsFlickering(boolean flick)
+	{
+		isFlickering = flick;
+	}
 
 	public void randColor(){
 		int rand = (int)(Math.random() * 6 + 1);

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.ArrayList;
 
 /**
  * A server for a multi-player tic tac toe game. Loosely based on an example in
@@ -79,11 +80,6 @@ class Game {
         return Arrays.stream(board).allMatch(p -> p != null);
     }
 
-    public synchronized void send(String intColors)
-    {
-      
-    }
-
     public synchronized void move(int location, Player player) 
     {
         if (player != currentPlayer) {
@@ -92,15 +88,11 @@ class Game {
         else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
         } 
-        // else if (board[location] != null) {
-        //     throw new IllegalStateException("Cell already occupied");
-        // }
+        else if (board[location] != null) {
+            throw new IllegalStateException("Cell already occupied");
+        }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
-    }
-    
-    public synchronized void drawOneBoard() {
-      
     }
 
     public class Player implements Playerable, java.lang.Runnable
@@ -108,6 +100,7 @@ class Game {
       private int winCount;   //The total amount wins a player has
       private int controlCount;   //The total blocks the user controls in current game
       private Color color;
+      private ArrayList<Integer> ownership;
 
       //For server stuff - Rachana
       private char mark;
@@ -121,11 +114,15 @@ class Game {
         winCount = 0;
         controlCount = 0;
         color = c;
+
+        ownership = new ArrayList<Integer>();
       }
       public Player(int wins)
       {
         winCount = wins;
         controlCount = 0;
+
+        ownership = new ArrayList<Integer>();
       }
 
       //SERVER
@@ -133,6 +130,8 @@ class Game {
       {
         this.socket = socket;
         this.mark = mark;
+
+        ownership = new ArrayList<Integer>();
       }
 
       public int getWinCount()
@@ -152,13 +151,20 @@ class Game {
       {
         color = x;
       }
+
       public void addWin()
       {
         winCount ++;
       }
+
       public void setControlCount(int x)
       {
         controlCount = x;
+      }
+
+      public void add(int blockPosition)
+      {
+        ownership.add(blockPosition);
       }
 
       //The following code is adapted from https://cs.lmu.edu/~ray/notes/javanetexamples/#tictactoe
@@ -199,12 +205,14 @@ class Game {
         if (mark == '1') 
         {
           currentPlayer = this;
+          currentPlayer.add(48);
           output.println("MESSAGE Waiting for opponent to connect");
         } 
         else 
         {          
           opponent = currentPlayer;
           opponent.opponent = this;
+          opponent.add(7);
           opponent.output.println("MESSAGE Your move");
         }
       }
@@ -214,10 +222,15 @@ class Game {
         while (input.hasNextLine()) 
         {
           String command = input.nextLine();
-          if (command.startsWith("QUIT")) {
-              return;
-          } else if (command.startsWith("MOVE")) {
-              processMoveCommand(Integer.parseInt(command.substring(5)));
+          if (command.startsWith("QUIT")) 
+          {
+            return;
+          } 
+          else if (command.startsWith("MOVE")) 
+          {
+            int colorToChangeTo = Integer.parseInt(command.substring(5));
+            // System.out.println(test);
+            processMoveCommand(colorToChangeTo);
           }
         }
       }
