@@ -100,7 +100,7 @@ class Game {
       private int winCount;   //The total amount wins a player has
       private int controlCount;   //The total blocks the user controls in current game
       private Color color;
-      private ArrayList<Integer> ownership;
+      // private ArrayList<Block> ownership;
 
       //For server stuff - Rachana
       private char mark;
@@ -115,14 +115,14 @@ class Game {
         controlCount = 0;
         color = c;
 
-        ownership = new ArrayList<Integer>();
+        // ownership = new ArrayList<Integer>();
       }
       public Player(int wins)
       {
         winCount = wins;
         controlCount = 0;
 
-        ownership = new ArrayList<Integer>();
+        // ownership = new ArrayList<Integer>();
       }
 
       //SERVER
@@ -131,7 +131,7 @@ class Game {
         this.socket = socket;
         this.mark = mark;
 
-        ownership = new ArrayList<Integer>();
+        // ownership = new ArrayList<Integer>();
       }
 
       public int getWinCount()
@@ -162,10 +162,10 @@ class Game {
         controlCount = x;
       }
 
-      public void add(int blockPosition)
-      {
-        ownership.add(blockPosition);
-      }
+      // public void add(int blockPosition)
+      // {
+      //   ownership.add(blockPosition);
+      // }
 
       //The following code is adapted from https://cs.lmu.edu/~ray/notes/javanetexamples/#tictactoe
 
@@ -205,14 +205,14 @@ class Game {
         if (mark == '1') 
         {
           currentPlayer = this;
-          currentPlayer.add(48);
+          // currentPlayer.add(48);
           output.println("MESSAGE Waiting for opponent to connect");
         } 
         else 
         {          
           opponent = currentPlayer;
           opponent.opponent = this;
-          opponent.add(7);
+          // opponent.add(7);
           opponent.output.println("MESSAGE Your move");
         }
       }
