@@ -82,9 +82,15 @@ public class GameBoard extends Canvas
             }
         }
         window.setColor(Color.BLACK);
-        window.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        window.drawString("1", 25, 400);
-        window.drawString("2", 458, 98);
+        window.setFont(new Font("Courier", Font.PLAIN, 40));
+        window.drawString("1", 22, 400);
+        window.drawString("2", 455, 98);
+
+	window.setFont(new Font("Courier", Font.PLAIN, 15));
+	window.drawString("USER 1: ", 50, 20);
+	window.drawString("USER 2: ", 50, 40);
+	window.drawString("GAMES WON: ", 250, 20);
+	window.drawString("GAMES WON: ", 250, 40);
 
     }
 
