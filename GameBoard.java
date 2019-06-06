@@ -11,30 +11,6 @@ import java.awt.Canvas;
 
 public class GameBoard extends Canvas
 {
-
-    // private Rectangle box;
-
-    // public GameBoard(){
-    //  box = new Rectangle();
-    // }
-
-
-    // public void drawScoreBoard(Graphics window){
-    //  Scanner keyboard = new Scanner(System.in);
-
-    //  out.println("Input username of first player.");
-    //  String userOne = keyboard.next();
-    //  window.drawString("Username: " + userOne, 10, 10);
-
-    //  window.drawString("Score: ", 40, 10);
-
-    //  out.println("Input username of second player.");
-    //  String userTwo = keyboard.next();
- //                window.drawString("Username: " + userTwo, 10, 100);
-
- //                window.drawString("Score: ", 40, 100);
-    // }
-
     private Block[][] grid;
 
     public GameBoard(){
@@ -83,10 +59,18 @@ public class GameBoard extends Canvas
         repaint();
     }
 
-    // public boolean checkAdjacencies(int color)
-    // {
-        
-    // }
+    public void setStatusInGrid(int[] status)
+    {
+        int counter = 0;
+        for (int row = 0; row < 7; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                grid[row][col].setStatus(status[counter]);
+                counter++;
+            }
+        }
+    }
 
     public void paint(Graphics window)
     {

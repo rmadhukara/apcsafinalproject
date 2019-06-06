@@ -34,7 +34,8 @@ public class NEWFillerClient {
   
   public static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   
-  public NEWFillerClient(String serverAddress) throws Exception {
+  public NEWFillerClient(String serverAddress) throws Exception 
+  {
       board = new GameBoard();
       buttons = new Panel[6];
       
@@ -81,57 +82,96 @@ public class NEWFillerClient {
    * is sent a "QUIT" message.
    */
   public void play() throws Exception {
-      try {
+      try 
+      {
           String response = in.nextLine();
           char mark = response.charAt(8);
           char opponentMark = mark == '1' ? '2' : '1';
           frame.setTitle("Filler: Player " + mark);
-          while (in.hasNextLine()) {
+          while (in.hasNextLine()) 
+          {
               response = in.nextLine();
-              if (response.startsWith("VALID_MOVE")) {
+              if (response.startsWith("VALID_MOVE")) 
+              {
                   messageLabel.setText("Valid move, please wait");
                   //current.setText(mark);
                   //current.repaint();
-              } else if (response.startsWith("OPPONENT_MOVED")) {
+              } 
+              else if (response.startsWith("OPPONENT_MOVED")) 
+              {
                   int loc = Integer.parseInt(response.substring(15));
                   //buttons[loc].setText(opponentMark);
                   //buttons[loc].repaint();
                   messageLabel.setText("Opponent moved, your turn");
-              } else if (response.startsWith("MESSAGE")) {
+              } 
+              else if (response.startsWith("MESSAGE")) 
+              {
                   messageLabel.setText(response.substring(8));
-              } else if (response.startsWith("VICTORY")) {
+              } 
+              else if (response.startsWith("VICTORY")) 
+              {
                   JOptionPane.showMessageDialog(frame, "Winner Winner");
                   break;
-              } else if (response.startsWith("DEFEAT")) {
+              } 
+              else if (response.startsWith("DEFEAT")) 
+              {
                   JOptionPane.showMessageDialog(frame, "Sorry you lost");
                   break;
-              } else if (response.startsWith("TIE")) {
+              } 
+              else if (response.startsWith("TIE")) 
+              {
                   JOptionPane.showMessageDialog(frame, "Tie");
                   break;
-              } else if (response.startsWith("OTHER_PLAYER_LEFT")) {
+              } 
+              else if (response.startsWith("OTHER_PLAYER_LEFT")) 
+              {
                   JOptionPane.showMessageDialog(frame, "Other player left");
                   break;
-              } else if (response.startsWith("BOARD_UPDATE")) {
-                  // JOptionPane.showMessageDialog(frame, "Other player left");
-                // response = in.nextLine().trim();
-                String turnToArray = response.substring(13);
-                String[] toSplit = turnToArray.split(" ");
+              } 
+              else if (response.startsWith("BOARD_UPDATE")) 
+              {
+                //FOR COLORS
+                String colorTurnToArray = response.substring(13, 124);
+                String[] colorToSplit = colorTurnToArray.split(" ");
 
-                int[] boardInts = new int[toSplit.length];
-                for (int i = 0; i < toSplit.length; i++)
+                int[] colorBoardInts = new int[colorToSplit.length];
+                for (int i = 0; i < colorToSplit.length; i++)
                 {
-                  boardInts[i] = Integer.parseInt(toSplit[i]);
+                  colorBoardInts[i] = Integer.parseInt(colorToSplit[i]);
                 }
-                // int[] boardInts = Integer.parseInt(turnToArray.split(" "));
-                board.setColorInGrid(boardInts);
-                  //break;
+
+                board.setColorInGrid(colorBoardInts);
+
+                //FOR STATUS
+                String statusTurnToArray = response.substring(125);
+                String[] statusToSplit = colorTurnToArray.split(" ");
+
+                int[] statusBoardInts = new int[statusToSplit.length];
+                for (int i = 0; i < statusToSplit.length; i++)
+                {
+                  statusBoardInts[i] = Integer.parseInt(statusToSplit[i]);
+                }
+
+                board.setStatusInGrid(statusBoardInts);
               }
+              // else if (response.startsWith("INITIALIZE 1")) 
+              // {
+              //   GameBoard now = board.getGrid();
+              //   now[6][0].setStatus(1);
+              // }
+              // else if (response.startsWith("INITIALIZE 2")) 
+              // {
+              //   GameBoard now = board.getGrid();
+              //   now[6][0].setStatus(2);
+              // }
           }
           out.println("QUIT");
-      } catch (Exception e) {
+      } 
+      catch (Exception e) {
           e.printStackTrace();
       }
-      finally {
+      finally 
+      {
           socket.close();
           frame.dispose();
       }

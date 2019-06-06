@@ -13,33 +13,39 @@ public class Block extends Rectangle
 	private int status;
 	private boolean isFlickering;
 
-	public Block(){
+	public Block()
+	{
 		super();
 		color = Color.BLACK;
 		status = 0;
 		isFlickering = false;
 	}
 
-	public Block(int size, int stat){
+	public Block(int size, int stat)
+	{
 		super(size);
 		randColor();
 		setStatus(stat);
 		isFlickering = false;
 	}
 
-	public void setStatus(int stat){
+	public void setStatus(int stat)
+	{
 		status = stat;
 	}
 
-	public void setColor(Color col){
+	public void setColor(Color col)
+	{
 		color = col;
 	}
 
-	public int getStatus(){
+	public int getStatus()
+	{
 		return status;
 	}
 
-	public Color getColor(){
+	public Color getColor()
+	{
 		return color;
 	}
 
@@ -48,7 +54,8 @@ public class Block extends Rectangle
 		isFlickering = flick;
 	}
 
-	public void randColor(){
+	public void randColor()
+	{
 		int rand = (int)(Math.random() * 6 + 1);
 		if(rand == 1)
 			color = Color.RED;

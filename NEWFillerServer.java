@@ -31,32 +31,42 @@ import java.util.ArrayList;
  */
 public class NEWFillerServer {
 
-    public static void main(String[] args) throws Exception {
-        try (ServerSocket listener = new ServerSocket(58901)) {
+    public static void main(String[] args) throws Exception 
+    {
+        try (ServerSocket listener = new ServerSocket(58901)) 
+        {
             System.out.println("Filler Server is Running...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
-            while (true) {
+            while (true) 
+            {
                 //set random game board once
                 int[][] colorNum = new int[7][8];
                 colorNum[0][0] = (int)(Math.random()*6);
-                for(int col = 1; col < 8; col++){
+                for(int col = 1; col < 8; col++)
+                {
                   colorNum[0][col] = (int)(Math.random()*6);
-                  while(colorNum[0][col-1] == colorNum[0][col]){
+                  while(colorNum[0][col-1] == colorNum[0][col])
+                  {
                     colorNum[0][col] = (int)(Math.random()*6);
                   }
                 }
                 
-                for(int row = 1; row < 7; row++){
+                for(int row = 1; row < 7; row++)
+                {
                   colorNum[row][0] = (int)(Math.random()*6);
-                  while(colorNum[row][0] == colorNum[row-1][0]){
+                  while(colorNum[row][0] == colorNum[row-1][0])
+                  {
                     colorNum[row][0] = (int)(Math.random()*6);
                   }
                 }
                 
-                for(int row = 1; row < 7; row++){
-                  for(int col = 1; col < 8; col++){
+                for(int row = 1; row < 7; row++)
+                {
+                  for(int col = 1; col < 8; col++)
+                  {
                     colorNum[row][col] = (int)(Math.random()*6);
-                    while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1]){
+                    while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1])
+                    {
                       colorNum[row][col] = (int)(Math.random()*6);
                     }
                   }
@@ -78,8 +88,21 @@ public class NEWFillerServer {
                     boardInts += " " + col;
                   }
                 }
+
+                //Initialize status in grid
+
+                int[][] statusNum = new int[7][8];
+                statusNum[6][0] = 1;
+                statusNum[0][7] = 2;
+
+                String boardStatusInts = "";
+                for (int[] row : statusNum) {
+                  for (int col : row) {
+                    boardStatusInts += " " + col;
+                  }
+                }
                 
-                Game game = new Game(boardInts);
+                Game game = new Game(boardInts, boardStatusInts);
                 pool.execute(game.new Player(listener.accept(), '1'));
                 pool.execute(game.new Player(listener.accept(), '2'));
             }
@@ -89,14 +112,16 @@ public class NEWFillerServer {
 
 class Game {
     private String boardInts;
+    private String boardStatusInts;
     
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
     private Player[] board = new Player[56];
 
     Player currentPlayer;
     
-    public Game(String nums) {
-      boardInts = nums;
+    public Game(String colors, String status) {
+      boardInts = colors;
+      boardStatusInts = status;
     }
     
     public boolean hasWinner() {
@@ -128,6 +153,15 @@ class Game {
         else if (board[location] != null) {
             throw new IllegalStateException("Cell already occupied");
         }
+
+        // for (int row = 0; row < 7; row++)
+        // {
+        //   for (int col = 0; col < 8; col++)
+        //   {
+        //     if 
+        //   }
+        // }
+
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
     }
@@ -137,7 +171,6 @@ class Game {
       private int winCount;   //The total amount wins a player has
       private int controlCount;   //The total blocks the user controls in current game
       private Color color;
-      private ArrayList<Integer> ownership;
 
       //For server stuff - Rachana
       private char mark;
@@ -151,15 +184,11 @@ class Game {
         winCount = 0;
         controlCount = 0;
         color = c;
-
-        ownership = new ArrayList<Integer>();
       }
       public Player(int wins)
       {
         winCount = wins;
         controlCount = 0;
-
-        ownership = new ArrayList<Integer>();
       }
 
       //SERVER
@@ -167,8 +196,6 @@ class Game {
       {
         this.socket = socket;
         this.mark = mark;
-
-        ownership = new ArrayList<Integer>();
       }
 
       public int getWinCount()
@@ -197,11 +224,6 @@ class Game {
       public void setControlCount(int x)
       {
         controlCount = x;
-      }
-
-      public void add(int blockPosition)
-      {
-        ownership.add(blockPosition);
       }
 
       //The following code is adapted from https://cs.lmu.edu/~ray/notes/javanetexamples/#tictactoe
@@ -237,19 +259,19 @@ class Game {
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream(), true);
         output.println("WELCOME " + mark);
-        output.println("BOARD_UPDATE" + boardInts);
+        output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
         
         if (mark == '1') 
         {
           currentPlayer = this;
-          currentPlayer.add(48);
+          output.println("INITIALIZE 1");
           output.println("MESSAGE Waiting for opponent to connect");
         } 
         else 
         {          
           opponent = currentPlayer;
           opponent.opponent = this;
-          opponent.add(7);
+          output.println("INITIALIZE");
           opponent.output.println("MESSAGE Your move");
         }
       }
@@ -266,7 +288,6 @@ class Game {
           else if (command.startsWith("MOVE")) 
           {
             int colorToChangeTo = Integer.parseInt(command.substring(5));
-            // System.out.println(test);
             processMoveCommand(colorToChangeTo);
           }
         }
