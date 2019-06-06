@@ -156,6 +156,10 @@ public class NEWFillerClient {
                 }
 
                 board.setStatusInGrid(statusBoardInts);
+
+                // frame.getContentPane().repaint();
+                
+
               }
           }
           out.println("QUIT");
