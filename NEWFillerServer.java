@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -166,6 +167,8 @@ class Game {
           theCurrentPlayerStatus = 2;
         }
 
+        int[][] newStatusNum = statusNum;
+
         for (int row = 0; row < 7; row++)
         {
           for (int col = 0; col < 8; col++)
@@ -176,28 +179,41 @@ class Game {
               if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
               {
                 System.out.println("above "+ color);
-                statusNum[row][col] = theCurrentPlayerStatus;
+                newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block below
               else if (row+1 < 7 && statusNum[row+1][col] == theCurrentPlayerStatus)
               {
                 System.out.println("below " + color);
-                statusNum[row][col] = theCurrentPlayerStatus;
+                newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block left
               else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
               {
                 System.out.println("left " + color);
-                statusNum[row][col] = theCurrentPlayerStatus;
+                newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block right
               else if (col+1 < 8 && statusNum[row][col+1] == theCurrentPlayerStatus)
               {
                 System.out.println("right " + color);
-                statusNum[row][col] = theCurrentPlayerStatus;
+                newStatusNum[row][col] = theCurrentPlayerStatus;
               }
             }
           }
+        }
+
+        statusNum = newStatusNum;
+
+        for (int row = 0; row < statusNum.length; row++)
+        {
+          for (int col = 0; col < statusNum[0].length; col++)
+          {
+            if (statusNum[row][col] == theCurrentPlayerStatus)
+            {
+              colorNum[row][col] = color;
+            }
+          } 
         }
 
         turnArrayToString();
