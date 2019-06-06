@@ -44,11 +44,11 @@ public class Filler implements KeyListener, Runnable
     Gameboard board = new GameBoard();
     keys = new boolean[6];
     grid = board.getGrid();
-    changed = new boolean[8][7];
+    changed = new boolean[7][8];
 
     players = new Player[2];
-    players[0] = new Player(grid[7][0].getColor());
-    player[1] = new Player(grid[0][6].getColor());
+    players[0] = new Player(grid[6][0].getColor());
+    player[1] = new Player(grid[0][7].getColor());
 
     total_Count = 2;
     currentPlayer = 0;

@@ -37,46 +37,9 @@ public class NEWFillerServer {
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
                 //set random game board once
-                int[][] colorNum = new int[7][8];
-                colorNum[0][0] = (int)(Math.random()*6);
-                for(int col = 1; col < 8; col++){
-                  colorNum[0][col] = (int)(Math.random()*6);
-                  while(colorNum[0][col-1] == colorNum[0][col]){
-                    colorNum[0][col] = (int)(Math.random()*6);
-                  }
-                }
-                
-                for(int row = 1; row < 7; row++){
-                  colorNum[row][0] = (int)(Math.random()*6);
-                  while(colorNum[row][0] == colorNum[row-1][0]){
-                    colorNum[row][0] = (int)(Math.random()*6);
-                  }
-                }
-                
-                for(int row = 1; row < 7; row++){
-                  for(int col = 1; col < 8; col++){
-                    colorNum[row][col] = (int)(Math.random()*6);
-                    while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1]){
-                      colorNum[row][col] = (int)(Math.random()*6);
-                    }
-                  }
-                }
-                
-                /* PRINT TEST
-                for (int row = 0; row < 7; row++) {
-                  for (int col = 0; col < 8; col++) {
-                    System.out.print(colorNum[row][col] + " ");
-                  }
-                  System.out.println();
-                }
-                System.out.println();
-                */
-                
                 String boardInts = "";
-                for (int[] row : colorNum) {
-                  for (int col : row) {
-                    boardInts += " " + col;
-                  }
+                for (int i = 0; i < 56; i++) {
+                  boardInts += " " + (int)(Math.random() * 6);
                 }
                 
                 Game game = new Game(boardInts);
