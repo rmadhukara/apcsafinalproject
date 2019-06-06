@@ -56,7 +56,6 @@ public class GameBoard extends Canvas
             // PRINT TEST
             //System.out.println();
         }
-        repaint();
     }
 
     public void setStatusInGrid(int[] status)

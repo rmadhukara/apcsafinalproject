@@ -180,7 +180,7 @@ class Game {
                   statusNum[row][col] = theCurrentPlayerStatus;
                 }
               }
-              if (row+1 < 7) 
+              else if (row+1 < 7) 
               {
                 if (statusNum[row+1][col] == theCurrentPlayerStatus)
                 {
@@ -188,7 +188,7 @@ class Game {
                   statusNum[row][col] = theCurrentPlayerStatus;
                 }
               }
-              if (col-1 >= 0) 
+              else if (col-1 >= 0) 
               {
                 if (statusNum[row][col-1] == theCurrentPlayerStatus)
                 {
@@ -196,7 +196,7 @@ class Game {
                   statusNum[row][col] = theCurrentPlayerStatus;
                 }
               }
-              if (col+1 < 8) 
+              else if (col+1 < 8) 
               {
                 if (statusNum[row][col+1] == theCurrentPlayerStatus)
                 {
@@ -209,6 +209,9 @@ class Game {
         }
 
         turnArrayToString();
+
+        System.out.println("COLORS: " + boardInts);
+        System.out.println("STATUS: " + boardStatusInts);
 
         currentPlayer = currentPlayer.opponent;
     }
@@ -303,8 +306,8 @@ class Game {
         {
           move(color, this);
           output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
-          System.out.println("COLORS: " + boardInts);
-          System.out.println("STATUS: " + boardStatusInts);
+          // System.out.println("COLORS: " + boardInts);
+          // System.out.println("STATUS: " + boardStatusInts);
           opponent.output.println("OPPONENT_MOVED " + color);
           if (hasWinner()) 
           {
