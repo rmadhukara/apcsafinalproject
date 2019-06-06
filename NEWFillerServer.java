@@ -172,37 +172,29 @@ class Game {
           {
             if (colorNum[row][col] == color && statusNum[row][col] == 0)
             {
-              if (row-1 >= 0) 
+              //testing the block above
+              if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
               {
-                if (statusNum[row-1][col] == theCurrentPlayerStatus)
-                {
-                  colorNum[row][col] = color;
-                  statusNum[row][col] = theCurrentPlayerStatus;
-                }
+                System.out.println("above "+ color);
+                statusNum[row][col] = theCurrentPlayerStatus;
               }
-              else if (row+1 < 7) 
+              //testing the block below
+              else if (row+1 < 7 && statusNum[row+1][col] == theCurrentPlayerStatus)
               {
-                if (statusNum[row+1][col] == theCurrentPlayerStatus)
-                {
-                  colorNum[row][col] = color;
-                  statusNum[row][col] = theCurrentPlayerStatus;
-                }
+                System.out.println("below " + color);
+                statusNum[row][col] = theCurrentPlayerStatus;
               }
-              else if (col-1 >= 0) 
+              //testing the block left
+              else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
               {
-                if (statusNum[row][col-1] == theCurrentPlayerStatus)
-                {
-                  colorNum[row][col] = color;
-                  statusNum[row][col] = theCurrentPlayerStatus;
-                }
+                System.out.println("left " + color);
+                statusNum[row][col] = theCurrentPlayerStatus;
               }
-              else if (col+1 < 8) 
+              //testing the block right
+              else if (col+1 < 8 && statusNum[row][col+1] == theCurrentPlayerStatus)
               {
-                if (statusNum[row][col+1] == theCurrentPlayerStatus)
-                {
-                  colorNum[row][col] = color;
-                  statusNum[row][col] = theCurrentPlayerStatus;
-                }
+                System.out.println("right " + color);
+                statusNum[row][col] = theCurrentPlayerStatus;
               }
             }
           }
