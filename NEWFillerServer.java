@@ -31,48 +31,60 @@ import java.util.ArrayList;
  */
 public class NEWFillerServer {
 
-    public static void main(String[] args) throws Exception {
-        try (ServerSocket listener = new ServerSocket(58901)) {
-            System.out.println("Filler Server is Running...");
-            ExecutorService pool = Executors.newFixedThreadPool(200);
-            while (true) {
-                //set random game board once
-                String boardInts = "";
-                for (int i = 0; i < 56; i++) {
-                  boardInts += " " + (int)(Math.random() * 6);
-                }
+    public static void main(String[] args) throws Exception 
+    {
+      try (ServerSocket listener = new ServerSocket(58901)) 
+      {
+        System.out.println("Filler Server is Running...");
+        ExecutorService pool = Executors.newFixedThreadPool(200);
+
+        while (true) 
+        {
+          //set random game board once
+          String boardInts = "";
+          for (int i = 0; i < 56; i++) 
+          {
+            boardInts += " " + (int)(Math.random() * 6);
+          }
 
 
-                    int[][] colorNum = new int[7][8];
-    colorNum[0][0] = (int)(Math.random()*6) + 1;
-    for(int col = 1; col < 8; col++){
-      colorNum[0][col] = (int)(Math.random()*6) + 1;
-      while(colorNum[0][col-1] == colorNum[0][col]){
-        colorNum[0][col] = (int)(Math.random()*6) + 1;
-      }
-    }
-
-    for(int row = 1; row < 7; row++){
-      colorNum[row][0] = (int)(Math.random()*6) + 1;
-      while(colorNum[row][0] == colorNum[row-1][0]){
-        colorNum[row][0] = (int)(Math.random()*6) + 1;
-      }
-    }
-
-    for(int row = 1; row < 7; row++){
-      for(int col = 1; col < 8; col++){
-        colorNum[row][col] = (int)(Math.random()*6) + 1;
-        while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1]){
-          colorNum[row][col] = (int)(Math.random()*6) + 1;
-        }
-      }
-    }
-
-                Game game = new Game(boardInts);
-                pool.execute(game.new Player(listener.accept(), '1'));
-                pool.execute(game.new Player(listener.accept(), '2'));
+          int[][] colorNum = new int[7][8];
+          colorNum[0][0] = (int)(Math.random()*6) + 1;
+          for(int col = 1; col < 8; col++)
+          {
+            colorNum[0][col] = (int)(Math.random()*6) + 1;
+            while(colorNum[0][col-1] == colorNum[0][col])
+            {
+              colorNum[0][col] = (int)(Math.random()*6) + 1;
             }
+          }
+
+          for(int row = 1; row < 7; row++)
+          {
+            colorNum[row][0] = (int)(Math.random()*6) + 1;
+            while(colorNum[row][0] == colorNum[row-1][0])
+            {
+              colorNum[row][0] = (int)(Math.random()*6) + 1;
+            }
+          }
+
+          for(int row = 1; row < 7; row++)
+          {
+            for(int col = 1; col < 8; col++)
+            {
+              colorNum[row][col] = (int)(Math.random()*6) + 1;
+              while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1])
+              {
+                colorNum[row][col] = (int)(Math.random()*6) + 1;
+              }
+            }
+          }
+
+          Game game = new Game(boardInts);
+          pool.execute(game.new Player(listener.accept(), '1'));
+          pool.execute(game.new Player(listener.accept(), '2'));
         }
+      }
     }
 }
 
@@ -84,11 +96,13 @@ class Game {
 
     Player currentPlayer;
     
-    public Game(String nums) {
+    public Game(String nums) 
+    {
       boardInts = nums;
     }
     
-    public boolean hasWinner() {
+    public boolean hasWinner() 
+    {
       //fix
         return (board[0] != null && board[0] == board[1] && board[0] == board[2])
             || (board[3] != null && board[3] == board[4] && board[3] == board[5])
@@ -101,24 +115,28 @@ class Game {
         );
     }
 
-    public boolean boardFilledUp() {
+    public boolean boardFilledUp() 
+    {
       //fix
-        return Arrays.stream(board).allMatch(p -> p != null);
+      return Arrays.stream(board).allMatch(p -> p != null);
     }
 
     public synchronized void move(int location, Player player) 
     {
-        if (player != currentPlayer) {
-            throw new IllegalStateException("Not your turn");
-        } 
-        else if (player.opponent == null) {
-            throw new IllegalStateException("You don't have an opponent yet");
-        } 
-        else if (board[location] != null) {
-            throw new IllegalStateException("Cell already occupied");
-        }
-        board[location] = currentPlayer;
-        currentPlayer = currentPlayer.opponent;
+      if (player != currentPlayer) 
+      {
+        throw new IllegalStateException("Not your turn");
+      } 
+      else if (player.opponent == null) 
+      {
+        throw new IllegalStateException("You don't have an opponent yet");
+      } 
+      else if (board[location] != null) 
+      {
+        throw new IllegalStateException("Cell already occupied");
+      }
+      board[location] = currentPlayer;
+      currentPlayer = currentPlayer.opponent;
     }
 
     public class Player implements Playerable, java.lang.Runnable
