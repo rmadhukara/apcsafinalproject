@@ -47,7 +47,7 @@ public class NEWFillerClient {
       frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
       
       //Display Game Board
-      board.setBounds(0,0,500,390);
+      board.setBounds(0,0,500,440);
       frame.getContentPane().add(board);
 
       //Display Buttons
@@ -133,8 +133,8 @@ public class NEWFillerClient {
               } 
               else if (response.startsWith("BOARD_UPDATE")) 
               {
-                //FOR COLORS
-                String colorTurnToArray = response.substring(13, 124);
+                //FOR COLORS 124
+                String colorTurnToArray = response.substring(13, response.indexOf("-"));
                 String[] colorToSplit = colorTurnToArray.split(" ");
 
                 int[] colorBoardInts = new int[colorToSplit.length];
@@ -146,7 +146,7 @@ public class NEWFillerClient {
                 board.setColorInGrid(colorBoardInts);
 
                 //FOR STATUS
-                String statusTurnToArray = response.substring(125);
+                String statusTurnToArray = response.substring(response.indexOf("-") + 1);
                 String[] statusToSplit = colorTurnToArray.split(" ");
 
                 int[] statusBoardInts = new int[statusToSplit.length];
@@ -181,7 +181,7 @@ public class NEWFillerClient {
       }
       NEWFillerClient client = new NEWFillerClient(args[0]);
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      client.frame.setSize(500, 500);
+      client.frame.setSize(500, 550);
       client.frame.setVisible(true);
       client.frame.setResizable(false);
       client.play();

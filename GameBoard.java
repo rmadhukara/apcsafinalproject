@@ -78,13 +78,13 @@ public class GameBoard extends Canvas
             for(int col = 0; col < 8; col++)
             {
                 Block one = grid[row][col];
-                one.draw(window,50+(50*col),20+(50*row),one.getColor());
+                one.draw(window,50+(50*col),60+(50*row),one.getColor());
             }
         }
         window.setColor(Color.BLACK);
         window.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        window.drawString("1", 25, 360);
-        window.drawString("2", 458, 58);
+        window.drawString("1", 25, 400);
+        window.drawString("2", 458, 98);
 
     }
 

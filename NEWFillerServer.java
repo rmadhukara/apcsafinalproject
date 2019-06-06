@@ -210,9 +210,25 @@ class Game {
 
         turnArrayToString();
 
-        System.out.println("COLORS: " + boardInts);
-        System.out.println("STATUS: " + boardStatusInts);
-
+        //System.out.println("COLORS: " + boardInts);
+        for (int r = 0; r < 7; r++) {
+          for (int c = 0; c < 8; c++) {
+            System.out.print(colorNum[r][c] + " ");
+          }
+          System.out.println();
+        }
+        System.out.println();
+        //System.out.println("STATUS: " + boardStatusInts);
+        for (int r = 0; r < 7; r++) {
+          for (int c = 0; c < 8; c++) {
+            System.out.print(statusNum[r][c] + " ");
+          }
+          System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+        
+//move down
         currentPlayer = currentPlayer.opponent;
     }
 
@@ -308,7 +324,11 @@ class Game {
           output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
           // System.out.println("COLORS: " + boardInts);
           // System.out.println("STATUS: " + boardStatusInts);
+          opponent.output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
           opponent.output.println("OPPONENT_MOVED " + color);
+
+          //currentPlayer = currentPlayer.opponent;
+          
           if (hasWinner()) 
           {
             output.println("VICTORY");
