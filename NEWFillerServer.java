@@ -71,38 +71,14 @@ public class NEWFillerServer {
                     }
                   }
                 }
-                
-                /* PRINT TEST
-                for (int row = 0; row < 7; row++) {
-                  for (int col = 0; col < 8; col++) {
-                    System.out.print(colorNum[row][col] + " ");
-                  }
-                  System.out.println();
-                }
-                System.out.println();
-                */
-                
-                String boardInts = "";
-                for (int[] row : colorNum) {
-                  for (int col : row) {
-                    boardInts += " " + col;
-                  }
-                }
 
                 //Initialize status in grid
 
                 int[][] statusNum = new int[7][8];
                 statusNum[6][0] = 1;
                 statusNum[0][7] = 2;
-
-                String boardStatusInts = "";
-                for (int[] row : statusNum) {
-                  for (int col : row) {
-                    boardStatusInts += " " + col;
-                  }
-                }
                 
-                Game game = new Game(boardInts, boardStatusInts);
+                Game game = new Game(colorNum, statusNum);
                 pool.execute(game.new Player(listener.accept(), '1'));
                 pool.execute(game.new Player(listener.accept(), '2'));
             }
@@ -111,38 +87,64 @@ public class NEWFillerServer {
 }
 
 class Game {
+    private int[][] colorNum;
+    private int[][] statusNum;
     private String boardInts;
     private String boardStatusInts;
     
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
-    private Player[] board = new Player[56];
+    private Player[] playerBoard = new Player[56];
 
     Player currentPlayer;
     
-    public Game(String colors, String status) {
-      boardInts = colors;
-      boardStatusInts = status;
+    public Game(int[][] colors, int[][] status) 
+    {
+      colorNum = colors;
+      statusNum = status;
+      boardInts = "";
+      boardStatusInts = "";
+
+      turnArrayToString();
+    }
+
+    public void turnArrayToString()
+    {
+      for (int[] row : colorNum) 
+      {
+        for (int col : row) 
+        {
+          boardInts += " " + col;
+        }
+      }
+
+      for (int[] row : statusNum) 
+      {
+        for (int col : row) 
+        {
+          boardStatusInts += " " + col;
+        }
+      }
     }
     
     public boolean hasWinner() {
       //fix
-        return (board[0] != null && board[0] == board[1] && board[0] == board[2])
-            || (board[3] != null && board[3] == board[4] && board[3] == board[5])
-            || (board[6] != null && board[6] == board[7] && board[6] == board[8])
-            || (board[0] != null && board[0] == board[3] && board[0] == board[6])
-            || (board[1] != null && board[1] == board[4] && board[1] == board[7])
-            || (board[2] != null && board[2] == board[5] && board[2] == board[8])
-            || (board[0] != null && board[0] == board[4] && board[0] == board[8])
-            || (board[2] != null && board[2] == board[4] && board[2] == board[6]
+        return (playerBoard[0] != null && playerBoard[0] == playerBoard[1] && playerBoard[0] == playerBoard[2])
+            || (playerBoard[3] != null && playerBoard[3] == playerBoard[4] && playerBoard[3] == playerBoard[5])
+            || (playerBoard[6] != null && playerBoard[6] == playerBoard[7] && playerBoard[6] == playerBoard[8])
+            || (playerBoard[0] != null && playerBoard[0] == playerBoard[3] && playerBoard[0] == playerBoard[6])
+            || (playerBoard[1] != null && playerBoard[1] == playerBoard[4] && playerBoard[1] == playerBoard[7])
+            || (playerBoard[2] != null && playerBoard[2] == playerBoard[5] && playerBoard[2] == playerBoard[8])
+            || (playerBoard[0] != null && playerBoard[0] == playerBoard[4] && playerBoard[0] == playerBoard[8])
+            || (playerBoard[2] != null && playerBoard[2] == playerBoard[4] && playerBoard[2] == playerBoard[6]
         );
     }
 
     public boolean boardFilledUp() {
       //fix
-        return Arrays.stream(board).allMatch(p -> p != null);
+        return Arrays.stream(playerBoard).allMatch(p -> p != null);
     }
 
-    public synchronized void move(int location, Player player) 
+    public synchronized void move(int color, Player player) 
     {
         if (player != currentPlayer) {
             throw new IllegalStateException("Not your turn");
@@ -150,46 +152,75 @@ class Game {
         else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
         } 
-        else if (board[location] != null) {
+        else if (playerBoard[color] != null) {
             throw new IllegalStateException("Cell already occupied");
         }
 
-        // for (int row = 0; row < 7; row++)
-        // {
-        //   for (int col = 0; col < 8; col++)
-        //   {
-        //     if 
-        //   }
-        // }
+        int theCurrentPlayerStatus = 0;
+        if (player.getMark() == '1')
+        {
+          theCurrentPlayerStatus = 1;
+        }
+        else
+        {
+          theCurrentPlayerStatus = 2;
+        }
 
-        board[location] = currentPlayer;
+        for (int row = 0; row < 7; row++)
+        {
+          for (int col = 0; col < 8; col++)
+          {
+            if (colorNum[row][col] == color && statusNum[row][col] == 0)
+            {
+              if (row-1 >= 0) 
+              {
+                if (statusNum[row-1][col] == theCurrentPlayerStatus)
+                {
+                  colorNum[row][col] = color;
+                  statusNum[row][col] = theCurrentPlayerStatus;
+                }
+              }
+              if (row+1 < 7) 
+              {
+                if (statusNum[row+1][col] == theCurrentPlayerStatus)
+                {
+                  colorNum[row][col] = color;
+                  statusNum[row][col] = theCurrentPlayerStatus;
+                }
+              }
+              if (col-1 >= 0) 
+              {
+                if (statusNum[row][col-1] == theCurrentPlayerStatus)
+                {
+                  colorNum[row][col] = color;
+                  statusNum[row][col] = theCurrentPlayerStatus;
+                }
+              }
+              if (col+1 < 8) 
+              {
+                if (statusNum[row][col+1] == theCurrentPlayerStatus)
+                {
+                  colorNum[row][col] = color;
+                  statusNum[row][col] = theCurrentPlayerStatus;
+                }
+              }
+            }
+          }
+        }
+
+        turnArrayToString();
+
         currentPlayer = currentPlayer.opponent;
     }
 
-    public class Player implements Playerable, java.lang.Runnable
+    public class Player implements java.lang.Runnable
     {
-      private int winCount;   //The total amount wins a player has
-      private int controlCount;   //The total blocks the user controls in current game
-      private Color color;
-
       //For server stuff - Rachana
       private char mark;
       private Player opponent;
       private Socket socket;
       private Scanner input;
       private PrintWriter output;
-      
-      public Player(Color c)
-      {
-        winCount = 0;
-        controlCount = 0;
-        color = c;
-      }
-      public Player(int wins)
-      {
-        winCount = wins;
-        controlCount = 0;
-      }
 
       //SERVER
       public Player(Socket socket, char mark) 
@@ -198,35 +229,10 @@ class Game {
         this.mark = mark;
       }
 
-      public int getWinCount()
+      public char getMark()
       {
-        return winCount;
+        return mark;
       }
-      public int getControlCount()
-      {
-        return controlCount;
-      }
-      public Color getColor()
-      {
-        return color;
-      }
-
-      public void setColor(Color x)
-      {
-        color = x;
-      }
-
-      public void addWin()
-      {
-        winCount ++;
-      }
-
-      public void setControlCount(int x)
-      {
-        controlCount = x;
-      }
-
-      //The following code is adapted from https://cs.lmu.edu/~ray/notes/javanetexamples/#tictactoe
 
       //Override from Runnable
       public void run() 
@@ -264,14 +270,12 @@ class Game {
         if (mark == '1') 
         {
           currentPlayer = this;
-          output.println("INITIALIZE 1");
           output.println("MESSAGE Waiting for opponent to connect");
         } 
         else 
         {          
           opponent = currentPlayer;
           opponent.opponent = this;
-          output.println("INITIALIZE");
           opponent.output.println("MESSAGE Your move");
         }
       }
@@ -293,13 +297,15 @@ class Game {
         }
       }
 
-      private void processMoveCommand(int location) 
+      private void processMoveCommand(int color) 
       {
         try 
         {
-          move(location, this);
-          output.println("VALID_MOVE");
-          opponent.output.println("OPPONENT_MOVED " + location);
+          move(color, this);
+          output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
+          System.out.println("COLORS: " + boardInts);
+          System.out.println("STATUS: " + boardStatusInts);
+          opponent.output.println("OPPONENT_MOVED " + color);
           if (hasWinner()) 
           {
             output.println("VICTORY");
