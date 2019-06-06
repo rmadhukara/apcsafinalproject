@@ -9,8 +9,8 @@ CLASSES = \
 	Block.java \
 	GameBoard.java \
 	Panel.java \
-	#FillerClient.java \
-	#FillerServer.java
+	NEWFillerClient.java \
+	NEWFillerServer.java
 	#Filler.java \
 	#Player.java \
 	#Playerable.java \
