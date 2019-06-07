@@ -113,18 +113,18 @@ public class GameBoard extends Canvas
         }
 
 
-/*
+/* The persistence part (doesn't work right now)
 	Scanner file =  new Scanner(new File("UserScore.dat"));
 	String read = file.nextLine();
 	int index1 = read.indexOf(user1);
 	if(index1 != -1){
-		String num1 = read.charAt(index1 + user1.length() + 1);
+		char num1 = read.charAt(index1 + user1.length() + 1);
 		wins1 = (int)num1;
 	}
 
 	int index2 = read.indexOf(user2);
         if(index2 != -1){
-                String num2 = read.charAt(index2 + user2.length() + 1);
+                char num2 = read.charAt(index2 + user2.length() + 1);
                 wins2 = (int)num2;
         }
 
@@ -134,8 +134,8 @@ public class GameBoard extends Canvas
 	}
 
         if(index2 == -1){
-                out = new BufferedWriter(new FileWriter(file));
-                out.write(user2 + " " + wins2 + ", ");
+                BufferedWriter out2 = new BufferedWriter(new FileWriter(file));
+                out2.write(user2 + " " + wins2 + ", ");
         }
 */
 
