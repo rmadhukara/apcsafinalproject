@@ -173,6 +173,14 @@ public class NEWFillerClient {
                 board.setStatusInGrid(statusBoardInts);
                 board.run();
               }
+              else if (response.startsWith("UPDATE_USER"))
+              {
+                String user1 = response.substring(12, response.indexOf("-"));
+                board.setUser1(user1);
+                String user2 = response.substring(response.indexOf("-") + 1);
+                board.setUser2(user2);
+                board.run();
+              }
           }
           out.println("QUIT");
       } 

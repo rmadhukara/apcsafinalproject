@@ -12,6 +12,8 @@ class Game {
     private String boardColorInts;
     private String boardStatusInts;
     
+    private boolean setUp = true;
+    
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
     private Player[] playerButtons = new Player[6];
 
@@ -81,7 +83,15 @@ class Game {
         else if (playerButtons[color] != null) {
             throw new IllegalStateException("Cell already occupied");
         }
-
+/*
+        if (setUp && player.getMark() == '1') {
+          String user1 = player.getUsername();
+          String user2 = player.opponent.getUsername();
+          player.processUsernameCommand(user1 + "-" + user2);
+          player.opponent.processUsernameCommand(user1 + "-" + user2);
+          setUp = false;
+        }
+   */     
         int theCurrentPlayerStatus = 0;
         if (player.getMark() == '1')
         {
@@ -153,6 +163,9 @@ class Game {
       private Socket socket;
       private Scanner input;
       private PrintWriter output;
+      
+      private String username;
+      private int score;
 
       //SERVER
       public Player(Socket socket, char mark) 
@@ -164,6 +177,22 @@ class Game {
       public char getMark()
       {
         return mark;
+      }
+      
+      public String getUsername() {
+        return username;
+      }
+      
+      public int getScore() {
+        return score;
+      }
+      
+      public void setUsername(String user) {
+        username = user;
+      }
+      
+      public void setScore(int s) {
+        score = s;
       }
 
       //Override from Runnable
@@ -205,7 +234,7 @@ class Game {
           output.println("MESSAGE Waiting for opponent to connect");
         } 
         else 
-        {          
+        {
           opponent = currentPlayer;
           opponent.opponent = this;
           opponent.output.println("MESSAGE Your move");
@@ -225,6 +254,19 @@ class Game {
           {
             int colorToChangeTo = Integer.parseInt(command.substring(5));
             processMoveCommand(colorToChangeTo);
+          }
+          else if (command.startsWith("USER"))
+          {
+            String username = command.substring(5);
+            setUsername(username);
+            
+            if (setUp && getMark() == '2') {
+              String user1 = opponent.getUsername();
+              String user2 = getUsername();
+              opponent.processUsernameCommand(user1 + "-" + user2);
+              processUsernameCommand(user1 + "-" + user2);
+              setUp = false;
+            }
           }
         }
       }
@@ -250,6 +292,18 @@ class Game {
             output.println("TIE");
             opponent.output.println("TIE");
           }
+        } 
+        catch (IllegalStateException e) 
+        {
+          output.println("MESSAGE " + e.getMessage());
+        }
+      }
+      
+      private void processUsernameCommand(String userMessage)
+      {
+        try 
+        {
+          output.println("UPDATE_USER " + userMessage);
         } 
         catch (IllegalStateException e) 
         {
