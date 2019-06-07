@@ -14,6 +14,7 @@ public class GameBoard extends Canvas
     private Block[][] grid;
     private static int height = NEWFillerClient.HEIGHT;
     private static int width = NEWFillerClient.WIDTH;
+    private static Color[] colors = NEWFillerClient.COLORS;
     
 
     public GameBoard(){
@@ -46,33 +47,15 @@ public class GameBoard extends Canvas
 
     public void setColorInGrid(int[] colorInts)
     {
-      System.out.println("\nCOLORS: ");
-      
-      int c = 0;
-      for (int row = 0; row < height; row++)
-      {
-          for (int col = 0; col < width; col++)
-          {
-              System.out.print(colorInts[c]);
-              c++;
-          }
-          System.out.println();
-      }
-      
-      System.out.println("###");
         int counter = 0;
         for (int row = 0; row < height; row++)
         {
             for (int col = 0; col < width; col++)
             {
-                System.out.print(colorInts[counter] + " ");
-                grid[row][col].setColor(NEWFillerClient.COLORS[colorInts[counter]]);
+                grid[row][col].setColor(colors[colorInts[counter]]);
                 counter++;
             }
-            System.out.println();
         }
-        System.out.println("-");
-        System.out.println();
     }
 
     public void setStatusInGrid(int[] status)
@@ -90,14 +73,6 @@ public class GameBoard extends Canvas
 
     public void paint(Graphics window)
     {
-      /*for (int r = 0; r < height; r++) {
-        for (int c = 0; c < width; c++) {
-          System.out.println(grid[r][c].getColor() + " ");
-        }
-        System.out.println();
-      }
-      System.out.println("---");
-      */
       window.setColor(Color.WHITE);
       window.fillRect(0,0,500,440);
         for(int row = 0; row < height; row++)
@@ -118,8 +93,6 @@ public class GameBoard extends Canvas
     	window.drawString("USER 2: ", 50, 40);
     	window.drawString("GAMES WON: ", 250, 20);
     	window.drawString("GAMES WON: ", 250, 40);
-    	//System.out.println("hey");
-
     }
     
     public void run() {

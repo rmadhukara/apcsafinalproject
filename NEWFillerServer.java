@@ -191,25 +191,21 @@ class Game {
               //testing the block above
               if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
               {
-                //System.out.println("above "+ color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block below
               else if (row+1 < height && statusNum[row+1][col] == theCurrentPlayerStatus)
               {
-                //System.out.println("below " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block left
               else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
               {
-                //System.out.println("left " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block right
               else if (col+1 < width && statusNum[row][col+1] == theCurrentPlayerStatus)
               {
-                //System.out.println("right " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
             }
@@ -230,30 +226,6 @@ class Game {
         }
 
         turnArrayToString();
-        System.out.println("\n----------");
-        
-        /*boardColorInts = "";
-        for (int[] row : colorNum) 
-        {
-          for (int col : row) 
-          {
-            boardColorInts += " " + col;
-            System.out.print(" " + col);
-          }
-          System.out.println();
-        }
-
-        for (int[] row : statusNum) 
-        {
-          for (int col : row) 
-          {
-            boardStatusInts += " " + col;
-          }
-        }
-        */
-        System.out.println("\nSynchronize");
-        System.out.println(boardColorInts);
-        System.out.println("----------*");
         
         currentPlayer = currentPlayer.opponent;   
         
@@ -349,8 +321,7 @@ class Game {
         try 
         {
           String updateMessage = move(color, this);
-          System.out.println(updateMessage);
-          System.out.println("*----------\n");
+          
           output.println("VALID_MOVE");
           output.println("BOARD_UPDATE" + updateMessage);
           opponent.output.println("BOARD_UPDATE" + updateMessage);

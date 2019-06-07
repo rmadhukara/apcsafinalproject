@@ -135,8 +135,6 @@ public class NEWFillerClient {
               } 
               else if (response.startsWith("BOARD_UPDATE")) 
               {
-                System.out.println(response);
-                System.out.println("*");
                 //FOR COLORS
                 String colorTurnToArray = response.substring(13, response.indexOf("-"));
                 String[] colorToSplit = colorTurnToArray.split(" ");
@@ -145,43 +143,9 @@ public class NEWFillerClient {
                 for (int i = 0; i < colorToSplit.length; i++)
                 {
                   colorBoardInts[i] = Integer.parseInt(colorToSplit[i]);
-                  System.out.print(colorBoardInts[i]);
-                }
-                
-                System.out.println("\nCOLOR BOARD INTS: ");
-                for (int i = 0; i < colorBoardInts.length; i++) {
-                  System.out.print(colorBoardInts[i]);
-                }
-                System.out.println("\n");
-                int c = 0;
-                for (int row = 0; row < HEIGHT; row++)
-                {
-                    for (int col = 0; col < WIDTH; col++)
-                    {
-                        System.out.print(colorBoardInts[c]);
-                        c++;
-                    }
-                    System.out.println();
                 }
                 
                 board.setColorInGrid(colorBoardInts);
-                
-                /*
-                System.out.println("\nColorToSplit");
-                
-                int counter = 0;
-                for (int row = 0; row < 7; row++)
-                {
-                    for (int col = 0; col < 8; col++)
-                    {
-                        System.out.print(colorBoardInts[counter]);
-                        counter++;
-                    }
-                    System.out.println();
-                }
-                System.out.println("\n*****\n");
-                */
-                
                 
                 //FOR STATUS
                 String statusTurnToArray = response.substring(response.indexOf("-") + 2);
@@ -195,9 +159,6 @@ public class NEWFillerClient {
 
                 board.setStatusInGrid(statusBoardInts);
                 board.run();
-                //frame.getContentPane().repaint();
-                
-
               }
           }
           out.println("QUIT");
