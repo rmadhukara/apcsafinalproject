@@ -12,20 +12,23 @@ import java.awt.Canvas;
 public class GameBoard extends Canvas
 {
     private Block[][] grid;
+    private static int height = NEWFillerClient.HEIGHT;
+    private static int width = NEWFillerClient.WIDTH;
+    
 
     public GameBoard(){
-        grid = new Block[7][8];
-        for(int h = 0; h < 7; h++)
+        grid = new Block[height][width];
+        for(int h = 0; h < height; h++)
         {
-            for(int w = 0; w < 8; w++)
+            for(int w = 0; w < width; w++)
             {
                 grid[h][w] = new Block(50,0);
             }
         }
 
         //setting corner blocks to Player 1 and 2 blocks
-        grid[6][0] = new Block(50,1);
-        grid[0][7] = new Block(50,2);
+        grid[height-1][0] = new Block(50,1);
+        grid[0][width-1] = new Block(50,2);
 
     }
 
@@ -41,29 +44,43 @@ public class GameBoard extends Canvas
         return grid;
     }
 
-    public void setColorInGrid(int[] colors)
+    public void setColorInGrid(int[] colorInts)
     {
+      System.out.println("\nCOLORS: ");
+      
+      int c = 0;
+      for (int row = 0; row < height; row++)
+      {
+          for (int col = 0; col < width; col++)
+          {
+              System.out.print(colorInts[c]);
+              c++;
+          }
+          System.out.println();
+      }
+      
+      System.out.println("###");
         int counter = 0;
-        for (int row = 0; row < 7; row++)
+        for (int row = 0; row < height; row++)
         {
-            for (int col = 0; col < 8; col++)
+            for (int col = 0; col < width; col++)
             {
-                grid[row][col].setColor(NEWFillerClient.colors[colors[counter]]);
-                // PRINT TEST
-                //System.out.print(colors[counter] + " ");
+                System.out.print(colorInts[counter] + " ");
+                grid[row][col].setColor(NEWFillerClient.COLORS[colorInts[counter]]);
                 counter++;
             }
-            // PRINT TEST
-            //System.out.println();
+            System.out.println();
         }
+        System.out.println("-");
+        System.out.println();
     }
 
     public void setStatusInGrid(int[] status)
     {
         int counter = 0;
-        for (int row = 0; row < 7; row++)
+        for (int row = 0; row < height; row++)
         {
-            for (int col = 0; col < 8; col++)
+            for (int col = 0; col < width; col++)
             {
                 grid[row][col].setStatus(status[counter]);
                 counter++;
@@ -73,9 +90,19 @@ public class GameBoard extends Canvas
 
     public void paint(Graphics window)
     {
-        for(int row = 0; row < 7; row++)
+      /*for (int r = 0; r < height; r++) {
+        for (int c = 0; c < width; c++) {
+          System.out.println(grid[r][c].getColor() + " ");
+        }
+        System.out.println();
+      }
+      System.out.println("---");
+      */
+      window.setColor(Color.WHITE);
+      window.fillRect(0,0,500,440);
+        for(int row = 0; row < height; row++)
         {
-            for(int col = 0; col < 8; col++)
+            for(int col = 0; col < width; col++)
             {
                 Block one = grid[row][col];
                 one.draw(window,50+(50*col),60+(50*row),one.getColor());
@@ -86,14 +113,19 @@ public class GameBoard extends Canvas
         window.drawString("1", 22, 400);
         window.drawString("2", 455, 98);
 
-	window.setFont(new Font("Courier", Font.PLAIN, 15));
-	window.drawString("USER 1: ", 50, 20);
-	window.drawString("USER 2: ", 50, 40);
-	window.drawString("GAMES WON: ", 250, 20);
-	window.drawString("GAMES WON: ", 250, 40);
+    	window.setFont(new Font("Courier", Font.PLAIN, 15));
+    	window.drawString("USER 1: ", 50, 20);
+    	window.drawString("USER 2: ", 50, 40);
+    	window.drawString("GAMES WON: ", 250, 20);
+    	window.drawString("GAMES WON: ", 250, 40);
+    	//System.out.println("hey");
 
+    }
+    
+    public void run() {
+      repaint();
     }
 
 
 
-} //end Gameboard class
+} //end GameBoard class

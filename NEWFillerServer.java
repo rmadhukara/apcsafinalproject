@@ -31,7 +31,9 @@ import java.util.ArrayList;
  *     MESSAGE <text>
  */
 public class NEWFillerServer {
-
+    private static int height = NEWFillerClient.HEIGHT;
+    private static int width = NEWFillerClient.WIDTH;
+    
     public static void main(String[] args) throws Exception 
     {
         try (ServerSocket listener = new ServerSocket(58901)) 
@@ -40,10 +42,12 @@ public class NEWFillerServer {
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) 
             {
-                //set random game board once
-                int[][] colorNum = new int[7][8];
+                //Initialize random game board colors
+              
+                int[][] colorNum = new int[height][width];
+                
                 colorNum[0][0] = (int)(Math.random()*6);
-                for(int col = 1; col < 8; col++)
+                for(int col = 1; col < width; col++)
                 {
                   colorNum[0][col] = (int)(Math.random()*6);
                   while(colorNum[0][col-1] == colorNum[0][col])
@@ -52,7 +56,7 @@ public class NEWFillerServer {
                   }
                 }
                 
-                for(int row = 1; row < 7; row++)
+                for(int row = 1; row < height; row++)
                 {
                   colorNum[row][0] = (int)(Math.random()*6);
                   while(colorNum[row][0] == colorNum[row-1][0])
@@ -61,9 +65,9 @@ public class NEWFillerServer {
                   }
                 }
                 
-                for(int row = 1; row < 7; row++)
+                for(int row = 1; row < height; row++)
                 {
-                  for(int col = 1; col < 8; col++)
+                  for(int col = 1; col < width; col++)
                   {
                     colorNum[row][col] = (int)(Math.random()*6);
                     while(colorNum[row][col] == colorNum[row-1][col] || colorNum[row][col] == colorNum[row][col-1])
@@ -75,9 +79,10 @@ public class NEWFillerServer {
 
                 //Initialize status in grid
 
-                int[][] statusNum = new int[7][8];
-                statusNum[6][0] = 1;
-                statusNum[0][7] = 2;
+                int[][] statusNum = new int[height][width];
+                
+                statusNum[height-1][0] = 1;
+                statusNum[0][width-1] = 2;
                 
                 Game game = new Game(colorNum, statusNum);
                 pool.execute(game.new Player(listener.accept(), '1'));
@@ -85,15 +90,20 @@ public class NEWFillerServer {
             }
         }
     }
-}
+} // end NEWFillerServer class
 
 class Game {
+  //extends GameLogic
+    private static int height = NEWFillerClient.HEIGHT;
+    private static int width = NEWFillerClient.WIDTH;
+
     private int[][] colorNum;
     private int[][] statusNum;
-    private String boardInts;
+    private String boardColorInts;
     private String boardStatusInts;
     
     // Board cells numbered 0-55, top to bottom, left to right; null if empty
+    //fix hasWinner? don't need playerBoard
     private Player[] playerBoard = new Player[56];
 
     Player currentPlayer;
@@ -102,7 +112,7 @@ class Game {
     {
       colorNum = colors;
       statusNum = status;
-      boardInts = "";
+      boardColorInts = "";
       boardStatusInts = "";
 
       turnArrayToString();
@@ -110,14 +120,16 @@ class Game {
 
     public void turnArrayToString()
     {
+      boardColorInts = "";
       for (int[] row : colorNum) 
       {
         for (int col : row) 
         {
-          boardInts += " " + col;
+          boardColorInts += " " + col;
         }
       }
-
+      
+      boardStatusInts = "";
       for (int[] row : statusNum) 
       {
         for (int col : row) 
@@ -145,7 +157,7 @@ class Game {
         return Arrays.stream(playerBoard).allMatch(p -> p != null);
     }
 
-    public synchronized void move(int color, Player player) 
+    public synchronized String move(int color, Player player) 
     {
         if (player != currentPlayer) {
             throw new IllegalStateException("Not your turn");
@@ -167,36 +179,37 @@ class Game {
           theCurrentPlayerStatus = 2;
         }
 
+        // Change status of blocks after player selects color
         int[][] newStatusNum = statusNum;
 
-        for (int row = 0; row < 7; row++)
+        for (int row = 0; row < height; row++)
         {
-          for (int col = 0; col < 8; col++)
+          for (int col = 0; col < width; col++)
           {
             if (colorNum[row][col] == color && statusNum[row][col] == 0)
             {
               //testing the block above
               if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
               {
-                System.out.println("above "+ color);
+                //System.out.println("above "+ color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block below
-              else if (row+1 < 7 && statusNum[row+1][col] == theCurrentPlayerStatus)
+              else if (row+1 < height && statusNum[row+1][col] == theCurrentPlayerStatus)
               {
-                System.out.println("below " + color);
+                //System.out.println("below " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block left
               else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
               {
-                System.out.println("left " + color);
+                //System.out.println("left " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
               //testing the block right
-              else if (col+1 < 8 && statusNum[row][col+1] == theCurrentPlayerStatus)
+              else if (col+1 < width && statusNum[row][col+1] == theCurrentPlayerStatus)
               {
-                System.out.println("right " + color);
+                //System.out.println("right " + color);
                 newStatusNum[row][col] = theCurrentPlayerStatus;
               }
             }
@@ -217,27 +230,34 @@ class Game {
         }
 
         turnArrayToString();
-
-        //System.out.println("COLORS: " + boardInts);
-        for (int r = 0; r < 7; r++) {
-          for (int c = 0; c < 8; c++) {
-            System.out.print(colorNum[r][c] + " ");
-          }
-          System.out.println();
-        }
-        System.out.println();
-        //System.out.println("STATUS: " + boardStatusInts);
-        for (int r = 0; r < 7; r++) {
-          for (int c = 0; c < 8; c++) {
-            System.out.print(statusNum[r][c] + " ");
-          }
-          System.out.println();
-        }
-        System.out.println();
-        System.out.println();
+        System.out.println("\n----------");
         
-//move down
-        currentPlayer = currentPlayer.opponent;
+        /*boardColorInts = "";
+        for (int[] row : colorNum) 
+        {
+          for (int col : row) 
+          {
+            boardColorInts += " " + col;
+            System.out.print(" " + col);
+          }
+          System.out.println();
+        }
+
+        for (int[] row : statusNum) 
+        {
+          for (int col : row) 
+          {
+            boardStatusInts += " " + col;
+          }
+        }
+        */
+        System.out.println("\nSynchronize");
+        System.out.println(boardColorInts);
+        System.out.println("----------*");
+        
+        currentPlayer = currentPlayer.opponent;   
+        
+        return boardColorInts + "-" + boardStatusInts;
     }
 
     public class Player implements java.lang.Runnable
@@ -292,7 +312,7 @@ class Game {
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream(), true);
         output.println("WELCOME " + mark);
-        output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
+        output.println("BOARD_UPDATE" + boardColorInts + "-" + boardStatusInts);
         
         if (mark == '1') 
         {
@@ -328,14 +348,13 @@ class Game {
       {
         try 
         {
-          move(color, this);
-          output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
-          // System.out.println("COLORS: " + boardInts);
-          // System.out.println("STATUS: " + boardStatusInts);
-          opponent.output.println("BOARD_UPDATE" + boardInts + "-" + boardStatusInts);
+          String updateMessage = move(color, this);
+          System.out.println(updateMessage);
+          System.out.println("*----------\n");
+          output.println("VALID_MOVE");
+          output.println("BOARD_UPDATE" + updateMessage);
+          opponent.output.println("BOARD_UPDATE" + updateMessage);
           opponent.output.println("OPPONENT_MOVED " + color);
-
-          //currentPlayer = currentPlayer.opponent;
           
           if (hasWinner()) 
           {
@@ -353,5 +372,5 @@ class Game {
           output.println("MESSAGE " + e.getMessage());
         }
       }
-    }
-}
+    } // end Player class
+} // end Game class

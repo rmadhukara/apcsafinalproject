@@ -32,7 +32,9 @@ public class NEWFillerClient {
   private Panel[] buttons;
   private Panel current;
   
-  public static final Color[] colors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
+  public static final Color[] COLORS = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
+  public static final int HEIGHT = 7;
+  public static final int WIDTH = 8;
   
   public NEWFillerClient(String serverAddress) throws Exception 
   {
@@ -58,7 +60,7 @@ public class NEWFillerClient {
       for (var i = 0; i < buttons.length; i++) 
       {
           final int j = i;
-          buttons[i] = new Panel(colors[i]);
+          buttons[i] = new Panel(COLORS[i]);
           buttons[i].addMouseListener(new MouseAdapter() 
           {
               public void mousePressed(MouseEvent e) 
@@ -133,7 +135,9 @@ public class NEWFillerClient {
               } 
               else if (response.startsWith("BOARD_UPDATE")) 
               {
-                //FOR COLORS 124
+                System.out.println(response);
+                System.out.println("*");
+                //FOR COLORS
                 String colorTurnToArray = response.substring(13, response.indexOf("-"));
                 String[] colorToSplit = colorTurnToArray.split(" ");
 
@@ -141,13 +145,47 @@ public class NEWFillerClient {
                 for (int i = 0; i < colorToSplit.length; i++)
                 {
                   colorBoardInts[i] = Integer.parseInt(colorToSplit[i]);
+                  System.out.print(colorBoardInts[i]);
                 }
-
+                
+                System.out.println("\nCOLOR BOARD INTS: ");
+                for (int i = 0; i < colorBoardInts.length; i++) {
+                  System.out.print(colorBoardInts[i]);
+                }
+                System.out.println("\n");
+                int c = 0;
+                for (int row = 0; row < HEIGHT; row++)
+                {
+                    for (int col = 0; col < WIDTH; col++)
+                    {
+                        System.out.print(colorBoardInts[c]);
+                        c++;
+                    }
+                    System.out.println();
+                }
+                
                 board.setColorInGrid(colorBoardInts);
-
+                
+                /*
+                System.out.println("\nColorToSplit");
+                
+                int counter = 0;
+                for (int row = 0; row < 7; row++)
+                {
+                    for (int col = 0; col < 8; col++)
+                    {
+                        System.out.print(colorBoardInts[counter]);
+                        counter++;
+                    }
+                    System.out.println();
+                }
+                System.out.println("\n*****\n");
+                */
+                
+                
                 //FOR STATUS
-                String statusTurnToArray = response.substring(response.indexOf("-") + 1);
-                String[] statusToSplit = colorTurnToArray.split(" ");
+                String statusTurnToArray = response.substring(response.indexOf("-") + 2);
+                String[] statusToSplit = statusTurnToArray.split(" ");
 
                 int[] statusBoardInts = new int[statusToSplit.length];
                 for (int i = 0; i < statusToSplit.length; i++)
@@ -156,8 +194,8 @@ public class NEWFillerClient {
                 }
 
                 board.setStatusInGrid(statusBoardInts);
-
-                // frame.getContentPane().repaint();
+                board.run();
+                //frame.getContentPane().repaint();
                 
 
               }
