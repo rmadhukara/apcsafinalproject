@@ -51,11 +51,13 @@ public class NEWFillerClient {
       //Display Game Board
       board.setBounds(0,0,500,440);
       frame.getContentPane().add(board);
+      
 
       //Display Buttons
       JPanel boardPanel = new JPanel();
       
       boardPanel.setLayout(new GridLayout(1, 6, 10, 1));
+      boardPanel.setBackground(Color.WHITE);
       
       for (var i = 0; i < buttons.length; i++) 
       {
