@@ -10,7 +10,9 @@ CLASSES = \
 	GameBoard.java \
 	Panel.java \
 	NEWFillerClient.java \
-	NEWFillerServer.java
+	NEWFillerServer.java \
+	Game.java \
+	GameLogic.java
 	#Filler.java \
 	#Player.java \
 	#Playerable.java \
