@@ -111,7 +111,34 @@ public class GameBoard extends Canvas
                 one.draw(window,50+(50*col),60+(50*row),one.getColor());
             }
         }
-        
+
+
+/*
+	Scanner file =  new Scanner(new File("UserScore.dat"));
+	String read = file.nextLine();
+	int index1 = read.indexOf(user1);
+	if(index1 != -1){
+		String num1 = read.charAt(index1 + user1.length() + 1);
+		wins1 = (int)num1;
+	}
+
+	int index2 = read.indexOf(user2);
+        if(index2 != -1){
+                String num2 = read.charAt(index2 + user2.length() + 1);
+                wins2 = (int)num2;
+        }
+
+	if(index1 == -1){
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		out.write(user1 + " " + wins1 + ", ");
+	}
+
+        if(index2 == -1){
+                out = new BufferedWriter(new FileWriter(file));
+                out.write(user2 + " " + wins2 + ", ");
+        }
+*/
+
         window.setColor(Color.BLACK);
         window.setFont(new Font("Courier", Font.PLAIN, 40));
         window.drawString("1", 22, 400);
