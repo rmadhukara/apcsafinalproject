@@ -94,7 +94,7 @@ public class GameBoard extends Canvas
     }
     
     public void setScore2(int s2) {
-      score1 = s2;
+      score2 = s2;
   }
     
 

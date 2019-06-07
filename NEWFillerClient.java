@@ -181,6 +181,14 @@ public class NEWFillerClient {
                 board.setUser2(user2);
                 board.run();
               }
+              else if (response.startsWith("UPDATE_SCORE"))
+              {
+                int score1 = Integer.parseInt(response.substring(13, response.indexOf("-")));
+                board.setScore1(score1);
+                int score2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
+                board.setScore2(score2);
+                board.run();
+              }
           }
           out.println("QUIT");
       } 

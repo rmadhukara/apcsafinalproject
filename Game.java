@@ -83,15 +83,7 @@ class Game {
         else if (playerButtons[color] != null) {
             throw new IllegalStateException("Cell already occupied");
         }
-/*
-        if (setUp && player.getMark() == '1') {
-          String user1 = player.getUsername();
-          String user2 = player.opponent.getUsername();
-          player.processUsernameCommand(user1 + "-" + user2);
-          player.opponent.processUsernameCommand(user1 + "-" + user2);
-          setUp = false;
-        }
-   */     
+        
         int theCurrentPlayerStatus = 0;
         if (player.getMark() == '1')
         {
@@ -150,7 +142,15 @@ class Game {
 
         turnArrayToString();
         
-        currentPlayer = currentPlayer.opponent;   
+        //Switch Turns
+        currentPlayer = currentPlayer.opponent;
+        
+        //CALCULATE SCORE HERE (temp values - set score1 and score 2 in a method)
+        int score1 = 111;
+        int score2 = 222;
+        
+        player.setScore(score1);
+        player.opponent.setScore(score2);
         
         return boardColorInts + "-" + boardStatusInts;
     }
@@ -278,8 +278,15 @@ class Game {
           String updateMessage = move(color, this);
           
           output.println("VALID_MOVE");
+          
+          // Update grid
           output.println("BOARD_UPDATE" + updateMessage);
           opponent.output.println("BOARD_UPDATE" + updateMessage);
+          
+          // Update score: score1-score2
+          output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
+          opponent.output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
+          
           opponent.output.println("OPPONENT_MOVED " + color);
           
           if (hasWinner()) 
