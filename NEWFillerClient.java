@@ -32,8 +32,15 @@ public class NEWFillerClient {
   private Panel[] buttons;
   private Panel current;
   private String username;
+
+  public static final Color newRed = new Color(244, 53, 83);
+  public static final Color newGreen = new Color(161, 212, 80);
+  public static final Color newYellow = new Color(255, 224, 26);
+  public static final Color newBlue = new Color(72, 176, 246);
+  public static final Color newPurple = new Color(107, 75, 162);
+  public static final Color newBlack = new Color(68, 68, 68);
   
-  public static final Color[] COLORS = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
+  public static final Color[] COLORS = {newRed, newGreen, newYellow, newBlue, newPurple, newBlack};
   public static final int HEIGHT = 7;
   public static final int WIDTH = 8;
   
@@ -62,7 +69,7 @@ public class NEWFillerClient {
       boardPanel.setLayout(new GridLayout(1, 6, 10, 1));
       boardPanel.setBackground(Color.WHITE);
       
-      for (var i = 0; i < buttons.length; i++) 
+      for (int i = 0; i < buttons.length; i++) 
       {
           final int j = i;
           buttons[i] = new Panel(COLORS[i]);

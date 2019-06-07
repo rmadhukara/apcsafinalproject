@@ -13,6 +13,13 @@ public class Block extends Rectangle
 	private int status;
 	private boolean isFlickering;
 
+	Color newRed = new Color(244, 53, 83);
+	Color newGreen = new Color(157, 208, 79);
+	Color newYellow = new Color(225, 225, 35);
+	Color newBlue = new Color(72, 176, 246);
+	Color newPurple = new Color(107, 75, 162);
+	Color newBlack = new Color(68, 68, 68);
+
 	public Block()
 	{
 		super();
