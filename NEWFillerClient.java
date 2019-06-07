@@ -31,15 +31,17 @@ public class NEWFillerClient {
   private GameBoard board;
   private Panel[] buttons;
   private Panel current;
+  private String username;
   
   public static final Color[] COLORS = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.BLACK};
   public static final int HEIGHT = 7;
   public static final int WIDTH = 8;
   
-  public NEWFillerClient(String serverAddress) throws Exception 
+  public NEWFillerClient(String serverAddress, String user) throws Exception 
   {
       board = new GameBoard();
       buttons = new Panel[6];
+      username = user;
       
       socket = new Socket(serverAddress, 58901);
       in = new Scanner(socket.getInputStream());
@@ -48,10 +50,11 @@ public class NEWFillerClient {
       messageLabel.setBackground(Color.lightGray);
       frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
       
+      out.println("USER " + username);
+      
       //Display Game Board
       board.setBounds(0,0,500,440);
       frame.getContentPane().add(board);
-      
 
       //Display Buttons
       JPanel boardPanel = new JPanel();
@@ -94,7 +97,15 @@ public class NEWFillerClient {
           String response = in.nextLine();
           char mark = response.charAt(8);
           char opponentMark = mark == '1' ? '2' : '1';
-          frame.setTitle("Filler: Player " + mark);
+          frame.setTitle("FILLER: Player " + mark + " - " + username);
+          
+          if (mark == '1') {
+            board.setUser1(username);
+          }
+          else {
+            board.setUser2(username);
+          }
+          
           while (in.hasNextLine()) 
           {
               response = in.nextLine();
@@ -180,7 +191,13 @@ public class NEWFillerClient {
           System.err.println("Pass the server IP as the sole command line argument");
           return;
       }
-      NEWFillerClient client = new NEWFillerClient(args[0]);
+      
+      Scanner keyboard = new Scanner(System.in);
+      String username = "";
+      System.out.print("Input username :: ");
+      username = keyboard.next();
+              
+      NEWFillerClient client = new NEWFillerClient(args[0], username);
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       client.frame.setSize(500, 550);
       client.frame.setVisible(true);
