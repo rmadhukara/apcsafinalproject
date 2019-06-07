@@ -3,7 +3,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-class Game {
+class Game extends GameLogic
+{
     private static int height = NEWFillerClient.HEIGHT;
     private static int width = NEWFillerClient.WIDTH;
 
@@ -94,51 +95,53 @@ class Game {
           theCurrentPlayerStatus = 2;
         }
 
+        logic(colorNum, statusNum, theCurrentPlayerStatus, color);
+
         // Change status of blocks after player selects color
-        int[][] newStatusNum = statusNum;
+        // int[][] newStatusNum = statusNum;
 
-        for (int row = 0; row < height; row++)
-        {
-          for (int col = 0; col < width; col++)
-          {
-            if (colorNum[row][col] == color && statusNum[row][col] == 0)
-            {
-              //testing the block above
-              if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
-              {
-                newStatusNum[row][col] = theCurrentPlayerStatus;
-              }
-              //testing the block below
-              else if (row+1 < height && statusNum[row+1][col] == theCurrentPlayerStatus)
-              {
-                newStatusNum[row][col] = theCurrentPlayerStatus;
-              }
-              //testing the block left
-              else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
-              {
-                newStatusNum[row][col] = theCurrentPlayerStatus;
-              }
-              //testing the block right
-              else if (col+1 < width && statusNum[row][col+1] == theCurrentPlayerStatus)
-              {
-                newStatusNum[row][col] = theCurrentPlayerStatus;
-              }
-            }
-          }
-        }
+        // for (int row = 0; row < height; row++)
+        // {
+        //   for (int col = 0; col < width; col++)
+        //   {
+        //     if (colorNum[row][col] == color && statusNum[row][col] == 0)
+        //     {
+        //       //testing the block above
+        //       if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
+        //       {
+        //         newStatusNum[row][col] = theCurrentPlayerStatus;
+        //       }
+        //       //testing the block below
+        //       else if (row+1 < height && statusNum[row+1][col] == theCurrentPlayerStatus)
+        //       {
+        //         newStatusNum[row][col] = theCurrentPlayerStatus;
+        //       }
+        //       //testing the block left
+        //       else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
+        //       {
+        //         newStatusNum[row][col] = theCurrentPlayerStatus;
+        //       }
+        //       //testing the block right
+        //       else if (col+1 < width && statusNum[row][col+1] == theCurrentPlayerStatus)
+        //       {
+        //         newStatusNum[row][col] = theCurrentPlayerStatus;
+        //       }
+        //     }
+        //   }
+        // }
 
-        statusNum = newStatusNum;
+        // statusNum = newStatusNum;
 
-        for (int row = 0; row < statusNum.length; row++)
-        {
-          for (int col = 0; col < statusNum[0].length; col++)
-          {
-            if (statusNum[row][col] == theCurrentPlayerStatus)
-            {
-              colorNum[row][col] = color;
-            }
-          } 
-        }
+        // for (int row = 0; row < statusNum.length; row++)
+        // {
+        //   for (int col = 0; col < statusNum[0].length; col++)
+        //   {
+        //     if (statusNum[row][col] == theCurrentPlayerStatus)
+        //     {
+        //       colorNum[row][col] = color;
+        //     }
+        //   } 
+        // }
 
         turnArrayToString();
         
