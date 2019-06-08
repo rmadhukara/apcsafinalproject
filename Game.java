@@ -110,19 +110,17 @@ class Game extends GameLogic
         {
           for (int col = 0; col < statusNum[0].length; col++)
           {
-            if (statusNum[row][col] == theCurrentPlayerStatus)
+            if (statusNum[row][col] == 1)
             {
-              if (theCurrentPlayerStatus == 1)
-              {
-                score1++;
-              }
-              else if (theCurrentPlayerStatus == 2)
-              {
-                score2++;
-              }
+              score1++;
+            }
+            else if (statusNum[row][col] == 2)
+            {
+              score2++;
             }
           } 
         }
+        System.out.println(score1 + " " + score2);
         
         player.setScore(score1);
         player.opponent.setScore(score2);

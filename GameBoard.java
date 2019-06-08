@@ -39,8 +39,8 @@ public class GameBoard extends Canvas
         
         user1 = "";
         user2 = "";
-        score1 = 0;
-        score2 = 0;
+        score1 = 1;
+        score2 = 1;
     }
 
 
@@ -148,8 +148,8 @@ public class GameBoard extends Canvas
     	window.drawString("1: " + user1, 50, 20);
     	window.drawString("2: " + user2, 50, 40);
     	//PUT DRAW STRING SCORE HERE
-	window.drawString("SCORE: " + score1, 203, 20);
-	window.drawString("SCORE: " + score2, 203, 40);
+    	window.drawString("SCORE: " + score1, 203, 20);
+    	window.drawString("SCORE: " + score2, 203, 40);
 
     	window.drawString("GAMES WON: " + wins1, 336, 20);
     	window.drawString("GAMES WON: " + wins2, 336, 40);
