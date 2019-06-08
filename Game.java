@@ -64,13 +64,37 @@ class Game extends GameLogic
             || (playerBoard[2] != null && playerBoard[2] == playerBoard[4] && playerBoard[2] == playerBoard[6]
         );
       */
+      // if (boardFilledUp())
+      // {
+      //   if (currentPlayer.getScore()>currentPlayer.opponent.getScore())
+      //   {
+          
+      //   }
+      // }
       return false;
     }
 
     public boolean boardFilledUp() {
       //FIX
       //return Arrays.stream(playerBoard).allMatch(p -> p != null);
-      return false;
+      int count = 0;
+
+      for (int row = 0; row < statusNum.length; row++)
+      {
+        for (int col = 0; col < statusNum[0].length; col++)
+        {
+          if (statusNum[row][col] == 0)
+          {
+            count++;
+          }
+        } 
+      }
+
+      if (count > 0)
+      {
+        return false;
+      }
+      return true;
     }
 
     public synchronized String move(int color, Player player) 
@@ -120,7 +144,7 @@ class Game extends GameLogic
             }
           } 
         }
-        System.out.println(score1 + " " + score2);
+        // System.out.println(score1 + " " + score2);
         
         player.setScore(score1);
         player.opponent.setScore(score2);
