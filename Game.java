@@ -52,22 +52,26 @@ class Game extends GameLogic
     }
     
     public boolean hasWinner() {
-		if(!boardFilledUp())
-			return false;
-		int player1 = 0;
-		int player2 = 0;
-		for(row = 0; row < statusNum.length; row++)
-		{
-			for(col = 0; col < statusNum[0].length; col++)
-			{
-				if(statusNum[row][col] == 1)
-					player1++;
-				else
-					player2++;
-			}
-		}
-		if(player1 != player2)
-			return true;
+      //FIX
+      /*
+        return (playerBoard[0] != null && playerBoard[0] == playerBoard[1] && playerBoard[0] == playerBoard[2])
+            || (playerBoard[3] != null && playerBoard[3] == playerBoard[4] && playerBoard[3] == playerBoard[5])
+            || (playerBoard[6] != null && playerBoard[6] == playerBoard[7] && playerBoard[6] == playerBoard[8])
+            || (playerBoard[0] != null && playerBoard[0] == playerBoard[3] && playerBoard[0] == playerBoard[6])
+            || (playerBoard[1] != null && playerBoard[1] == playerBoard[4] && playerBoard[1] == playerBoard[7])
+            || (playerBoard[2] != null && playerBoard[2] == playerBoard[5] && playerBoard[2] == playerBoard[8])
+            || (playerBoard[0] != null && playerBoard[0] == playerBoard[4] && playerBoard[0] == playerBoard[8])
+            || (playerBoard[2] != null && playerBoard[2] == playerBoard[4] && playerBoard[2] == playerBoard[6]
+        );
+      */
+      // if (boardFilledUp())
+      // {
+      //   if (currentPlayer.getScore()>currentPlayer.opponent.getScore())
+      //   {
+          
+      //   }
+      // }
+      return false;
     }
 
     public boolean boardFilledUp() {
