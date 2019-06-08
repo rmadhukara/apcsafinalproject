@@ -97,66 +97,82 @@ class Game extends GameLogic
 
         logic(colorNum, statusNum, theCurrentPlayerStatus, color);
 
-        // Change status of blocks after player selects color
-        // int[][] newStatusNum = statusNum;
-
-        // for (int row = 0; row < height; row++)
-        // {
-        //   for (int col = 0; col < width; col++)
-        //   {
-        //     if (colorNum[row][col] == color && statusNum[row][col] == 0)
-        //     {
-        //       //testing the block above
-        //       if (row-1 >= 0 && statusNum[row-1][col] == theCurrentPlayerStatus)
-        //       {
-        //         newStatusNum[row][col] = theCurrentPlayerStatus;
-        //       }
-        //       //testing the block below
-        //       else if (row+1 < height && statusNum[row+1][col] == theCurrentPlayerStatus)
-        //       {
-        //         newStatusNum[row][col] = theCurrentPlayerStatus;
-        //       }
-        //       //testing the block left
-        //       else if (col-1 >= 0 && statusNum[row][col-1] == theCurrentPlayerStatus)
-        //       {
-        //         newStatusNum[row][col] = theCurrentPlayerStatus;
-        //       }
-        //       //testing the block right
-        //       else if (col+1 < width && statusNum[row][col+1] == theCurrentPlayerStatus)
-        //       {
-        //         newStatusNum[row][col] = theCurrentPlayerStatus;
-        //       }
-        //     }
-        //   }
-        // }
-
-        // statusNum = newStatusNum;
-
-        // for (int row = 0; row < statusNum.length; row++)
-        // {
-        //   for (int col = 0; col < statusNum[0].length; col++)
-        //   {
-        //     if (statusNum[row][col] == theCurrentPlayerStatus)
-        //     {
-        //       colorNum[row][col] = color;
-        //     }
-        //   } 
-        // }
-
         turnArrayToString();
         
         //Switch Turns
-        currentPlayer = currentPlayer.opponent;
-        
+        // currentPlayer = currentPlayer.opponent;
+
         //CALCULATE SCORE HERE (temp values - set score1 and score 2 in a method)
-        int score1 = 111;
-        int score2 = 222;
+        int score1 = 0;
+        int score2 = 0;
+
+        for (int row = 0; row < statusNum.length; row++)
+        {
+          for (int col = 0; col < statusNum[0].length; col++)
+          {
+            if (statusNum[row][col] == theCurrentPlayerStatus)
+            {
+              if (theCurrentPlayerStatus == 1)
+              {
+                score1++;
+              }
+              else if (theCurrentPlayerStatus == 2)
+              {
+                score2++;
+              }
+            }
+          } 
+        }
         
         player.setScore(score1);
         player.opponent.setScore(score2);
+
+        //Switch Turns
+        currentPlayer = currentPlayer.opponent;
         
         return boardColorInts + "-" + boardStatusInts;
     }
+
+    // public synchronized void scoreUpdate(Player player)
+    // {
+    //   int theCurrentPlayerStatus = 0;
+    //   if (player.getMark() == '1')
+    //   {
+    //     theCurrentPlayerStatus = 1;
+    //   }
+    //   else
+    //   {
+    //     theCurrentPlayerStatus = 2;
+    //   }
+
+    //   //CALCULATE SCORE HERE (temp values - set score1 and score 2 in a method)
+    //   int score1 = 0;
+    //   int score2 = 0;
+
+    //   for (int row = 0; row < statusNum.length; row++)
+    //   {
+    //     for (int col = 0; col < statusNum[0].length; col++)
+    //     {
+    //       if (statusNum[row][col] == theCurrentPlayerStatus)
+    //       {
+    //         if (theCurrentPlayerStatus == 1)
+    //         {
+    //           score1++;
+    //         }
+    //         else if (theCurrentPlayerStatus == 2)
+    //         {
+    //           score2++;
+    //         }
+    //       }
+    //     } 
+    //   }
+      
+    //   player.setScore(score1);
+    //   player.opponent.setScore(score2);
+
+    //   //Switch Turns
+    //   currentPlayer = currentPlayer.opponent;
+    // }
 
     public class Player implements java.lang.Runnable
     {
@@ -285,6 +301,8 @@ class Game extends GameLogic
           // Update grid
           output.println("BOARD_UPDATE" + updateMessage);
           opponent.output.println("BOARD_UPDATE" + updateMessage);
+
+          // scoreUpdate(this);
           
           // Update score: score1-score2
           output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
