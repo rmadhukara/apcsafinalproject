@@ -5,9 +5,6 @@ import java.util.Scanner;
 
 class Game extends GameLogic
 {
-    private static int height = NEWFillerClient.HEIGHT;
-    private static int width = NEWFillerClient.WIDTH;
-
     private int[][] colorNum;
     private int[][] statusNum;
     private String boardColorInts;
@@ -51,7 +48,7 @@ class Game extends GameLogic
       }
     }
     
-    public boolean hasWinner() {
+    public boolean isWinner() {
       //FIX
       /*
         return (playerBoard[0] != null && playerBoard[0] == playerBoard[1] && playerBoard[0] == playerBoard[2])
@@ -71,7 +68,11 @@ class Game extends GameLogic
           
       //   }
       // }
-      return false;
+      return boardFilledUp() && currentPlayer.getScore()>currentPlayer.opponent.getScore();
+    }
+    
+    public boolean isTie() {
+      return boardFilledUp() && currentPlayer.getScore() == currentPlayer.opponent.getScore();
     }
 
     public boolean boardFilledUp() {
@@ -123,10 +124,6 @@ class Game extends GameLogic
 
         turnArrayToString();
         
-        //Switch Turns
-        // currentPlayer = currentPlayer.opponent;
-
-        //CALCULATE SCORE HERE (temp values - set score1 and score 2 in a method)
         int score1 = 0;
         int score2 = 0;
 
@@ -143,9 +140,7 @@ class Game extends GameLogic
               score2++;
             }
           } 
-        }
-        // System.out.println(score1 + " " + score2);
-        
+        }        
         player.setScore(score1);
         player.opponent.setScore(score2);
 
@@ -154,47 +149,6 @@ class Game extends GameLogic
         
         return boardColorInts + "-" + boardStatusInts;
     }
-
-    // public synchronized void scoreUpdate(Player player)
-    // {
-    //   int theCurrentPlayerStatus = 0;
-    //   if (player.getMark() == '1')
-    //   {
-    //     theCurrentPlayerStatus = 1;
-    //   }
-    //   else
-    //   {
-    //     theCurrentPlayerStatus = 2;
-    //   }
-
-    //   //CALCULATE SCORE HERE (temp values - set score1 and score 2 in a method)
-    //   int score1 = 0;
-    //   int score2 = 0;
-
-    //   for (int row = 0; row < statusNum.length; row++)
-    //   {
-    //     for (int col = 0; col < statusNum[0].length; col++)
-    //     {
-    //       if (statusNum[row][col] == theCurrentPlayerStatus)
-    //       {
-    //         if (theCurrentPlayerStatus == 1)
-    //         {
-    //           score1++;
-    //         }
-    //         else if (theCurrentPlayerStatus == 2)
-    //         {
-    //           score2++;
-    //         }
-    //       }
-    //     } 
-    //   }
-      
-    //   player.setScore(score1);
-    //   player.opponent.setScore(score2);
-
-    //   //Switch Turns
-    //   currentPlayer = currentPlayer.opponent;
-    // }
 
     public class Player implements java.lang.Runnable
     {
@@ -207,6 +161,9 @@ class Game extends GameLogic
       
       private String username;
       private int score;
+      private int wins;
+      
+      private boolean gameover = false;
 
       //SERVER
       public Player(Socket socket, char mark) 
@@ -228,12 +185,20 @@ class Game extends GameLogic
         return score;
       }
       
+      public int getWins() {
+        return wins;
+      }
+      
       public void setUsername(String user) {
         username = user;
       }
       
       public void setScore(int s) {
         score = s;
+      }
+      
+      public void setWins(int w) {
+        wins = w;
       }
 
       //Override from Runnable
@@ -298,14 +263,25 @@ class Game extends GameLogic
           }
           else if (command.startsWith("USER"))
           {
-            String username = command.substring(5);
+            String username = command.substring(5, command.indexOf("-"));
             setUsername(username);
+            
+            int wins = Integer.parseInt(command.substring(command.indexOf("-") + 1));
+            setWins(wins);
             
             if (setUp && getMark() == '2') {
               String user1 = opponent.getUsername();
               String user2 = getUsername();
+              
+              int wins1 = opponent.getWins();
+              int wins2 = getWins();
+              
               opponent.processUsernameCommand(user1 + "-" + user2);
               processUsernameCommand(user1 + "-" + user2);
+              
+              opponent.processWinsCommand(wins1 + "-" + wins2);
+              processWinsCommand(wins1 + "-" + wins2);
+              
               setUp = false;
             }
           }
@@ -323,8 +299,6 @@ class Game extends GameLogic
           // Update grid
           output.println("BOARD_UPDATE" + updateMessage);
           opponent.output.println("BOARD_UPDATE" + updateMessage);
-
-          // scoreUpdate(this);
           
           // Update score: score1-score2
           output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
@@ -332,16 +306,32 @@ class Game extends GameLogic
           
           opponent.output.println("OPPONENT_MOVED " + color);
           
-          if (hasWinner()) 
+          if (isWinner()) 
           {
             output.println("VICTORY");
-            opponent.output.println("DEFEAT");
-          } 
-          else if (boardFilledUp()) 
+            opponent.output.println("DEFEAT");  
+            wins++;
+            gameover = true;
+          }
+          else if (isTie()) 
           {
             output.println("TIE");
-            opponent.output.println("TIE");
+            opponent.output.println("TIE");            
+            gameover = true;
           }
+          else
+          {
+            output.println("DEFEAT");
+            opponent.output.println("VICTORY");          
+            gameover = true;
+          }
+          
+          if (gameover) {
+            // Update wins: wins1-wins2
+            output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
+            opponent.output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
+          }
+          
         } 
         catch (IllegalStateException e) 
         {
@@ -349,11 +339,23 @@ class Game extends GameLogic
         }
       }
       
-      private void processUsernameCommand(String userMessage)
+      private void processUsernameCommand(String message)
       {
         try 
         {
-          output.println("UPDATE_USER " + userMessage);
+          output.println("UPDATE_USER " + message);
+        } 
+        catch (IllegalStateException e) 
+        {
+          output.println("MESSAGE " + e.getMessage());
+        }
+      }
+      
+      private void processWinsCommand(String message)
+      {
+        try 
+        {
+          output.println("UPDATE_WINS " + message);
         } 
         catch (IllegalStateException e) 
         {

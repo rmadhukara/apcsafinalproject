@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -31,7 +32,9 @@ public class NEWFillerClient {
   private GameBoard board;
   private Panel[] buttons;
   private Panel current;
+  
   private String username;
+  private int wins;
 
   public static final Color newRed = new Color(244, 53, 83);
   public static final Color newGreen = new Color(161, 212, 80);
@@ -48,7 +51,9 @@ public class NEWFillerClient {
   {
       board = new GameBoard();
       buttons = new Panel[6];
+      
       username = user;
+      wins = 0;
       
       socket = new Socket(serverAddress, 58901);
       in = new Scanner(socket.getInputStream());
@@ -57,7 +62,23 @@ public class NEWFillerClient {
       messageLabel.setBackground(Color.lightGray);
       frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
       
-      out.println("USER " + username);
+      //Check file to see if username has won any games previously
+      Scanner file =  new Scanner(new File("UserScore.dat"));
+      
+      while (file.hasNextLine()) {
+        String read = file.nextLine();
+        
+        if(read.indexOf(username) > -1) {
+          wins = Integer.parseInt(read.substring(read.indexOf(" ") + 1));
+          break;
+        }
+      }
+      
+      file.close();
+      
+      //Send user info (username and wins) to server
+      out.println("USER " + username + "-" + wins);
+      
       
       //Display Game Board
       board.setBounds(0,0,500,440);
@@ -108,9 +129,11 @@ public class NEWFillerClient {
           
           if (mark == '1') {
             board.setUser1(username);
+            board.setWins1(wins);
           }
           else {
             board.setUser2(username);
+            board.setWins2(wins);
           }
           
           while (in.hasNextLine()) 
@@ -135,16 +158,19 @@ public class NEWFillerClient {
               } 
               else if (response.startsWith("VICTORY")) 
               {
+                  board.save();
                   JOptionPane.showMessageDialog(frame, "Winner Winner");
                   break;
               } 
               else if (response.startsWith("DEFEAT")) 
               {
+                  board.save();
                   JOptionPane.showMessageDialog(frame, "Sorry you lost");
                   break;
               } 
               else if (response.startsWith("TIE")) 
               {
+                  board.save();
                   JOptionPane.showMessageDialog(frame, "Tie");
                   break;
               } 
@@ -194,6 +220,14 @@ public class NEWFillerClient {
                 board.setScore1(score1);
                 int score2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
                 board.setScore2(score2);
+                board.run();
+              }
+              else if (response.startsWith("UPDATE_WINS"))
+              {
+                int wins1 = Integer.parseInt(response.substring(12, response.indexOf("-")));
+                board.setWins1(wins1);
+                int wins2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
+                board.setWins2(wins2);
                 board.run();
               }
           }

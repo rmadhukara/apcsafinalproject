@@ -3,7 +3,13 @@ import static java.lang.System.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import javax.imageio.ImageIO;
 import java.util.*;
 import java.awt.Font;
@@ -82,7 +88,7 @@ public class GameBoard extends Canvas
     }
     
     public void setUser1(String u1) {
-        user1 = u1;
+      user1 = u1;
     }
     
     public void setUser2(String u2) {
@@ -90,13 +96,20 @@ public class GameBoard extends Canvas
     }
     
     public void setScore1(int s1) {
-        score1 = s1;
+      score1 = s1;
     }
     
     public void setScore2(int s2) {
       score2 = s2;
-  }
+    }
     
+    public void setWins1(int w1) {
+      wins1 = w1;
+    }
+    
+    public void setWins2(int w2) {
+      wins2 = w2;
+    }
 
     public void paint(Graphics window)
     {
@@ -111,34 +124,7 @@ public class GameBoard extends Canvas
                 one.draw(window,50+(50*col),60+(50*row),one.getColor());
             }
         }
-
-
-/* The persistence part (doesn't work right now)
-	Scanner file =  new Scanner(new File("UserScore.dat"));
-	String read = file.nextLine();
-	int index1 = read.indexOf(user1);
-	if(index1 != -1){
-		char num1 = read.charAt(index1 + user1.length() + 1);
-		wins1 = (int)num1;
-	}
-
-	int index2 = read.indexOf(user2);
-        if(index2 != -1){
-                char num2 = read.charAt(index2 + user2.length() + 1);
-                wins2 = (int)num2;
-        }
-
-	if(index1 == -1){
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		out.write(user1 + " " + wins1 + ", ");
-	}
-
-        if(index2 == -1){
-                BufferedWriter out2 = new BufferedWriter(new FileWriter(file));
-                out2.write(user2 + " " + wins2 + ", ");
-        }
-*/
-
+        
         window.setColor(Color.BLACK);
         window.setFont(new Font("Courier", Font.PLAIN, 40));
         window.drawString("1", 22, 400);
@@ -147,7 +133,7 @@ public class GameBoard extends Canvas
     	window.setFont(new Font("Courier", Font.PLAIN, 15));
     	window.drawString("1: " + user1, 50, 20);
     	window.drawString("2: " + user2, 50, 40);
-    	//PUT DRAW STRING SCORE HERE
+    	
     	window.drawString("SCORE: " + score1, 203, 20);
     	window.drawString("SCORE: " + score2, 203, 40);
 
@@ -158,7 +144,52 @@ public class GameBoard extends Canvas
     public void run() {
       repaint();
     }
-
+    
+    public void save() throws IOException {
+      String filename = "UserScore.dat";
+      
+      //Format: username #
+      Scanner file =  new Scanner(new File(filename));
+      
+      //Put file into ArrayList
+      ArrayList<String> users = new ArrayList<String>();      
+      while(file.hasNextLine()) {
+        users.add(file.nextLine());
+      }
+      
+      //Edit ArrayList
+      boolean user1found = false;
+      boolean user2found = false;
+      
+      for (int i = 0; i < users.size(); i++) {
+        if (!user1found && users.get(i).indexOf(user1) > -1) {
+          users.set(i, user1 + " " + wins1);
+          user1found = true;
+        }
+        
+        if (!user2found && users.get(i).indexOf(user2) > -1) {
+          users.set(i, user2 + " " + wins2);
+          user2found = true;
+        }
+      }
+      
+      //If username not found, add to list
+      if(!user1found){        
+        users.add(user1 + " " + wins1);
+      }
+    
+      if(!user2found){
+        users.add(user2 + " " + wins2);
+      }
+      
+      //Write to file
+      FileWriter writer = new FileWriter(filename); 
+      for(String str: users) {
+        writer.write(str);
+        writer.write(System.getProperty("line.separator"));
+      }
+      writer.close();
+    }
 
 
 } //end GameBoard class
