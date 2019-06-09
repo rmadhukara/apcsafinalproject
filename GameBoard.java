@@ -182,6 +182,10 @@ public class GameBoard extends Canvas
         users.add(user2 + " " + wins2);
       }
       
+      for (String i : users) {
+        System.out.println(i);
+      }
+      
       //Write to file
       FileWriter writer = new FileWriter(filename); 
       for(String str: users) {

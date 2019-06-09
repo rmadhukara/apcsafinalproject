@@ -68,7 +68,7 @@ class Game extends GameLogic
           
       //   }
       // }
-      return boardFilledUp() && currentPlayer.getScore()>currentPlayer.opponent.getScore();
+      return boardFilledUp() && (currentPlayer.getScore( ) > currentPlayer.opponent.getScore());
     }
     
     public boolean isTie() {
@@ -90,12 +90,8 @@ class Game extends GameLogic
           }
         } 
       }
-
-      if (count > 0)
-      {
-        return false;
-      }
-      return true;
+      
+      return !(count > 0);
     }
 
     public synchronized String move(int color, Player player) 
@@ -317,12 +313,6 @@ class Game extends GameLogic
           {
             output.println("TIE");
             opponent.output.println("TIE");            
-            gameover = true;
-          }
-          else
-          {
-            output.println("DEFEAT");
-            opponent.output.println("VICTORY");          
             gameover = true;
           }
           
