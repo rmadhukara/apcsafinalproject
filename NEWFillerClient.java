@@ -159,13 +159,13 @@ public class NEWFillerClient {
               else if (response.startsWith("VICTORY")) 
               {
                   board.save();
-                  JOptionPane.showMessageDialog(frame, "Winner Winner");
+                  JOptionPane.showMessageDialog(frame, "You won!");
                   break;
               } 
               else if (response.startsWith("DEFEAT")) 
               {
                   board.save();
-                  JOptionPane.showMessageDialog(frame, "Sorry you lost");
+                  JOptionPane.showMessageDialog(frame, "Sorry you lost :(");
                   break;
               } 
               else if (response.startsWith("TIE")) 
@@ -229,6 +229,10 @@ public class NEWFillerClient {
                 int wins2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
                 board.setWins2(wins2);
                 board.run();
+              }
+              else if (response.startsWith("INVALID"))
+              {
+                JOptionPane.showMessageDialog(frame, "Invalid color to pick");
               }
           }
           out.println("QUIT");

@@ -48,27 +48,9 @@ class Game extends GameLogic
       }
     }
     
-    public boolean isWinner() {
-      //FIX
-      /*
-        return (playerBoard[0] != null && playerBoard[0] == playerBoard[1] && playerBoard[0] == playerBoard[2])
-            || (playerBoard[3] != null && playerBoard[3] == playerBoard[4] && playerBoard[3] == playerBoard[5])
-            || (playerBoard[6] != null && playerBoard[6] == playerBoard[7] && playerBoard[6] == playerBoard[8])
-            || (playerBoard[0] != null && playerBoard[0] == playerBoard[3] && playerBoard[0] == playerBoard[6])
-            || (playerBoard[1] != null && playerBoard[1] == playerBoard[4] && playerBoard[1] == playerBoard[7])
-            || (playerBoard[2] != null && playerBoard[2] == playerBoard[5] && playerBoard[2] == playerBoard[8])
-            || (playerBoard[0] != null && playerBoard[0] == playerBoard[4] && playerBoard[0] == playerBoard[8])
-            || (playerBoard[2] != null && playerBoard[2] == playerBoard[4] && playerBoard[2] == playerBoard[6]
-        );
-      */
-      // if (boardFilledUp())
-      // {
-      //   if (currentPlayer.getScore()>currentPlayer.opponent.getScore())
-      //   {
-          
-      //   }
-      // }
-      return boardFilledUp() && (currentPlayer.getScore( ) > currentPlayer.opponent.getScore());
+    public boolean isWinner() 
+    {
+      return boardFilledUp() && (currentPlayer.getScore() > currentPlayer.opponent.getScore());
     }
     
     public boolean isTie() {
@@ -76,8 +58,6 @@ class Game extends GameLogic
     }
 
     public boolean boardFilledUp() {
-      //FIX
-      //return Arrays.stream(playerBoard).allMatch(p -> p != null);
       int count = 0;
 
       for (int row = 0; row < statusNum.length; row++)
@@ -105,6 +85,8 @@ class Game extends GameLogic
         else if (playerButtons[color] != null) {
             throw new IllegalStateException("Cell already occupied");
         }
+
+        player.setCurrentColor(color);
         
         int theCurrentPlayerStatus = 0;
         if (player.getMark() == '1')
@@ -148,7 +130,6 @@ class Game extends GameLogic
 
     public class Player implements java.lang.Runnable
     {
-      //For server stuff - Rachana
       private char mark;
       private Player opponent;
       private Socket socket;
@@ -158,10 +139,10 @@ class Game extends GameLogic
       private String username;
       private int score;
       private int wins;
+      private int currentColor;
       
       private boolean gameover = false;
 
-      //SERVER
       public Player(Socket socket, char mark) 
       {
         this.socket = socket;
@@ -173,28 +154,44 @@ class Game extends GameLogic
         return mark;
       }
       
-      public String getUsername() {
+      public String getUsername() 
+      {
         return username;
       }
       
-      public int getScore() {
+      public int getScore() 
+      {
         return score;
       }
       
-      public int getWins() {
+      public int getWins() 
+      {
         return wins;
       }
       
-      public void setUsername(String user) {
+      public void setUsername(String user) 
+      {
         username = user;
       }
       
-      public void setScore(int s) {
+      public void setScore(int s) 
+      {
         score = s;
       }
       
-      public void setWins(int w) {
+      public void setWins(int w) 
+      {
         wins = w;
+      }
+
+      public void setCurrentColor(int color)
+      {
+        currentColor = color;
+      }
+
+      public int getCurrentColor()
+      {
+        return currentColor;
       }
 
       //Override from Runnable
@@ -255,7 +252,15 @@ class Game extends GameLogic
           else if (command.startsWith("MOVE")) 
           {
             int colorToChangeTo = Integer.parseInt(command.substring(5));
-            processMoveCommand(colorToChangeTo);
+
+            if (colorToChangeTo == currentPlayer.getCurrentColor() || colorToChangeTo == currentPlayer.opponent.getCurrentColor())
+            {
+              output.println("INVALID");
+            }
+            else
+            {
+              processMoveCommand(colorToChangeTo);
+            }
           }
           else if (command.startsWith("USER"))
           {
