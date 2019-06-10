@@ -69,9 +69,14 @@ public class GameBoard extends Canvas
             for (int col = 0; col < width; col++)
             {
                 grid[row][col].setColor(colors[colorInts[counter]]);
-                counter++;
+		counter++;
             }
         }
+        while(grid[height-1][0].getColor() == grid[0][width-1].getColor()){
+            grid[height-1][0].setColor(colors[colorInts[(int)(Math.random()*height*width)]]);
+            grid[0][width-1].setColor(colors[colorInts[(int)(Math.random()*height*width)]]);
+	}
+
     }
 
     public void setStatusInGrid(int[] status)
