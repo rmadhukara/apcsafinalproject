@@ -1,10 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,9 +7,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.Arrays;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -115,7 +107,7 @@ public class NEWFillerClient {
    * The first message will be a "WELCOME" message in which we receive our
    * mark. Then we go into a loop listening for any of the other messages,
    * and handling each message appropriately. The "VICTORY", "DEFEAT", "TIE",
-   *  and "OTHER_PLAYER_LEFhT" messages will ask the user whether or not to
+   *  and "OTHER_PLAYER_LEFT" messages will ask the user whether or not to
    * play another game. If the answer is no, the loop is exited and the server
    * is sent a "QUIT" message.
    */
@@ -142,14 +134,10 @@ public class NEWFillerClient {
               if (response.startsWith("VALID_MOVE")) 
               {
                   messageLabel.setText("Valid move, please wait");
-                  //current.setText(mark);
-                  //current.repaint();
               } 
               else if (response.startsWith("OPPONENT_MOVED")) 
               {
                   int loc = Integer.parseInt(response.substring(15));
-                  //buttons[loc].setText(opponentMark);
-                  //buttons[loc].repaint();
                   messageLabel.setText("Opponent moved, your turn");
               } 
               else if (response.startsWith("MESSAGE")) 
@@ -181,54 +169,33 @@ public class NEWFillerClient {
               } 
               else if (response.startsWith("BOARD_UPDATE")) 
               {
-                //FOR COLORS
+                //Update Colors
                 String colorTurnToArray = response.substring(13, response.indexOf("-"));
-                String[] colorToSplit = colorTurnToArray.split(" ");
-
-                int[] colorBoardInts = new int[colorToSplit.length];
-                for (int i = 0; i < colorToSplit.length; i++)
-                {
-                  colorBoardInts[i] = Integer.parseInt(colorToSplit[i]);
-                }
+                updateColors(colorTurnToArray);
                 
-                board.setColorInGrid(colorBoardInts);
-                
-                //FOR STATUS
+                //Update Status
                 String statusTurnToArray = response.substring(response.indexOf("-") + 2);
-                String[] statusToSplit = statusTurnToArray.split(" ");
-
-                int[] statusBoardInts = new int[statusToSplit.length];
-                for (int i = 0; i < statusToSplit.length; i++)
-                {
-                  statusBoardInts[i] = Integer.parseInt(statusToSplit[i]);
-                }
-
-                board.setStatusInGrid(statusBoardInts);
+                updateStatus(statusTurnToArray);
+                
                 board.run();
               }
               else if (response.startsWith("UPDATE_USER"))
               {
                 String user1 = response.substring(12, response.indexOf("-"));
-                board.setUser1(user1);
                 String user2 = response.substring(response.indexOf("-") + 1);
-                board.setUser2(user2);
-                board.run();
+                updateUser(user1, user2);
               }
               else if (response.startsWith("UPDATE_SCORE"))
               {
                 int score1 = Integer.parseInt(response.substring(13, response.indexOf("-")));
-                board.setScore1(score1);
                 int score2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
-                board.setScore2(score2);
-                board.run();
+                updateScore(score1, score2);
               }
               else if (response.startsWith("UPDATE_WINS"))
               {
                 int wins1 = Integer.parseInt(response.substring(12, response.indexOf("-")));
-                board.setWins1(wins1);
                 int wins2 = Integer.parseInt(response.substring(response.indexOf("-") + 1));
-                board.setWins2(wins2);
-                board.run();
+                updateWins(wins1, wins2);
               }
               else if (response.startsWith("INVALID"))
               {
@@ -246,7 +213,49 @@ public class NEWFillerClient {
           frame.dispose();
       }
   }
+  
+  public void updateColors(String colors) {
+    String[] colorToSplit = colors.split(" ");
 
+    int[] colorBoardInts = new int[colorToSplit.length];
+    for (int i = 0; i < colorToSplit.length; i++)
+    {
+      colorBoardInts[i] = Integer.parseInt(colorToSplit[i]);
+    }
+    
+    board.setColorInGrid(colorBoardInts);
+  }
+  
+  public void updateStatus(String status) {
+    String[] statusToSplit = status.split(" ");
+
+    int[] statusBoardInts = new int[statusToSplit.length];
+    for (int i = 0; i < statusToSplit.length; i++)
+    {
+      statusBoardInts[i] = Integer.parseInt(statusToSplit[i]);
+    }
+
+    board.setStatusInGrid(statusBoardInts);
+  }
+  
+  public void updateUser(String user1, String user2) {
+    board.setUser1(user1);
+    board.setUser2(user2);
+    board.run();
+  }
+  
+  public void updateScore(int score1, int score2) {
+    board.setScore1(score1);
+    board.setScore2(score2);
+    board.run();
+  }
+  
+  public void updateWins(int wins1, int wins2) {
+    board.setWins1(wins1);
+    board.setWins2(wins2);
+    board.run();
+  }
+  
   public static void main(String[] args) throws Exception {
       if (args.length != 1) {
           System.err.println("Pass the server IP as the sole command line argument");
@@ -257,7 +266,8 @@ public class NEWFillerClient {
       String username = "";
       System.out.print("Input username :: ");
       username = keyboard.next();
-              
+      keyboard.close();
+      
       NEWFillerClient client = new NEWFillerClient(args[0], username);
       client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       client.frame.setSize(500, 550);

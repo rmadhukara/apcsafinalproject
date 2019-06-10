@@ -1,16 +1,8 @@
-
-import static java.lang.System.*;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import javax.imageio.ImageIO;
 import java.util.*;
 import java.awt.Font;
 import java.awt.Canvas;
@@ -69,14 +61,9 @@ public class GameBoard extends Canvas
             for (int col = 0; col < width; col++)
             {
                 grid[row][col].setColor(colors[colorInts[counter]]);
-		counter++;
+                counter++;
             }
         }
-        while(grid[height-1][0].getColor() == grid[0][width-1].getColor()){
-            grid[height-1][0].setColor(colors[colorInts[(int)(Math.random()*height*width)]]);
-            grid[0][width-1].setColor(colors[colorInts[(int)(Math.random()*height*width)]]);
-	}
-
     }
 
     public void setStatusInGrid(int[] status)
@@ -161,6 +148,8 @@ public class GameBoard extends Canvas
       while(file.hasNextLine()) {
         users.add(file.nextLine());
       }
+      
+      file.close();
       
       //Edit ArrayList
       boolean user1found = false;

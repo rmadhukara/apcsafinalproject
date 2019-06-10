@@ -50,6 +50,10 @@ class Game extends GameLogic
     
     public boolean isWinner() 
     {
+      return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore());
+    }
+    
+    public boolean isLoser() {
       return boardFilledUp() && (currentPlayer.getScore() > currentPlayer.opponent.getScore());
     }
     
@@ -141,8 +145,6 @@ class Game extends GameLogic
       private int wins;
       private int currentColor;
       
-      private boolean gameover = false;
-
       public Player(Socket socket, char mark) 
       {
         this.socket = socket;
@@ -309,29 +311,36 @@ class Game extends GameLogic
           
           if (isWinner()) 
           {
+            setWins(getWins() + 1);
+            updateWins();
+            
             output.println("VICTORY");
             opponent.output.println("DEFEAT");  
-            wins++;
-            gameover = true;
+          }
+          else if (isLoser()) {
+            opponent.setWins(opponent.getWins() + 1);
+            updateWins();
+            
+            output.println("DEFEAT");
+            opponent.output.println("VICTORY");
           }
           else if (isTie()) 
           {
             output.println("TIE");
-            opponent.output.println("TIE");            
-            gameover = true;
+            opponent.output.println("TIE");
           }
-          
-          if (gameover) {
-            // Update wins: wins1-wins2
-            output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
-            opponent.output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
-          }
-          
         } 
+        
         catch (IllegalStateException e) 
         {
           output.println("MESSAGE " + e.getMessage());
         }
+      }
+      
+      private void updateWins() {
+        //Update wins: wins1-wins2
+        output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
+        opponent.output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
       }
       
       private void processUsernameCommand(String message)
