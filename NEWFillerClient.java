@@ -59,6 +59,7 @@ public class NEWFillerClient {
       
       while (file.hasNextLine()) {
         String read = file.nextLine();
+        System.out.println(read);
         
         if(read.indexOf(username) > -1) {
           wins = Integer.parseInt(read.substring(read.indexOf(" ") + 1));
@@ -200,6 +201,10 @@ public class NEWFillerClient {
               else if (response.startsWith("INVALID"))
               {
                 JOptionPane.showMessageDialog(frame, "Invalid color to pick");
+              }
+              else if (response.startsWith("REPAINT"))
+              {
+                board.run();
               }
           }
           out.println("QUIT");

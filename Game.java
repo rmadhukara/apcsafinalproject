@@ -56,15 +56,15 @@ class Game extends GameLogic
       return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore() || 
           currentPlayer.getScore() > currentPlayer.opponent.getScore());
     }
-    /*
-    public boolean isWinner() 
+    
+    public boolean currentIsWinner() 
     {
-      return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore());
-    }*/
-    /*
-    public boolean isLoser() {
       return boardFilledUp() && (currentPlayer.getScore() > currentPlayer.opponent.getScore());
-    }*/
+    }
+    
+    public boolean currentIsLoser() {
+      return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore());
+    }
     
     public boolean isTie() {
       return boardFilledUp() && currentPlayer.getScore() == currentPlayer.opponent.getScore();
@@ -122,23 +122,48 @@ class Game extends GameLogic
         player.opponent.setScore(score2);
         
         //Test for Winner
-        if (hasWinner())
-        {
-          if (player.getScore() > player.opponent.getScore()) {
-            player.setWins(player.getWins() + 1);
-            player.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
-            player.opponent.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
-            player.processWinner();
+        int wins1 = 0;
+        int wins2 = 0;
+        
+        if (currentIsWinner()) {
+          System.out.println("WINNER: " + player.getMark());
+          player.addWin();
+          
+          if (player.getMark() == '1') {
+            wins1 = player.getWins();
+            wins2 = player.opponent.getWins();
           }
           else {
-            player.opponent.setWins(player.opponent.getWins() + 1);
-            player.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
-            player.opponent.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
-            player.opponent.processWinner();
+            wins1 = player.opponent.getWins();
+            wins2 = player.getWins();
           }
+          player.processWinsCommand(wins1 + "-" + wins2);
+          player.opponent.processWinsCommand(wins1 + "-" + wins2);
+          
+          player.processWinner();
+        }
+        else if (currentIsLoser()) {
+          System.out.println("LOSER: " + player.getMark());
+          player.opponent.addWin();
+          
+          if (player.getMark() == '1') {
+            wins1 = player.getWins();
+            wins2 = player.opponent.getWins();
+          }
+          else {
+            wins1 = player.opponent.getWins();
+            wins2 = player.getWins();
+          }
+          player.processWinsCommand(wins1 + "-" + wins2);
+          player.opponent.processWinsCommand(wins1 + "-" + wins2);
+          
+          player.opponent.processWinner();
         }
         else if (isTie()) 
         {
+          player.output.println("REPAINT");
+          player.opponent.output.println("REPAINT");
+          
           player.output.println("TIE");
           player.opponent.output.println("TIE");
         }
@@ -201,6 +226,11 @@ class Game extends GameLogic
       public void setWins(int w) 
       {
         wins = w;
+      }
+      
+      public void addWin()
+      {
+        wins++;
       }
 
       public void setCurrentColor(int color)
@@ -332,49 +362,7 @@ class Game extends GameLogic
           opponent.output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
           
           opponent.output.println("OPPONENT_MOVED " + color);
-          
-          //Update wins: wins1-wins2
-          /*
-          if (hasWinner())
-          {
-            if (getScore() > opponent.getScore()) {
-              setWins(getWins() + 1);
-              processWinsCommand(getWins() + "-" + opponent.getWins());
-              
-              output.println("VICTORY");
-              opponent.output.println("DEFEAT"); 
-            }
-            else {
-              opponent.setWins(opponent.getWins() + 1);
-              processWinsCommand(getWins() + "-" + opponent.getWins());
-              
-              output.println("DEFEAT");
-              opponent.output.println("VICTORY");
-            }
-          }*/
-          /*
-          if (isWinner()) 
-          {
-            setWins(getWins() + 1);
-            updateWins();
-            
-            output.println("VICTORY");
-            opponent.output.println("DEFEAT");  
-          }*/
-          /*
-          else if (isLoser()) {
-            opponent.setWins(opponent.getWins() + 1);
-            updateWins();
-            
-            output.println("DEFEAT");
-            opponent.output.println("VICTORY");
-          }
-          else if (isTie()) 
-          {
-            output.println("TIE");
-            opponent.output.println("TIE");
-          }*/
-        } 
+        }
         
         catch (IllegalStateException e) 
         {

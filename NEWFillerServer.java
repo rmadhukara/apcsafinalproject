@@ -37,6 +37,7 @@ public class NEWFillerServer {
       int[][] colorNum = new int[height][width];
       
       colorNum[0][0] = (int)(Math.random()*6);
+      
       for(int col = 1; col < width; col++)
       {
         colorNum[0][col] = (int)(Math.random()*6);
@@ -46,13 +47,19 @@ public class NEWFillerServer {
         }
       }
       
-      for(int row = 1; row < height; row++)
+      for(int row = 1; row < height-1; row++)
       {
         colorNum[row][0] = (int)(Math.random()*6);
         while(colorNum[row][0] == colorNum[row-1][0])
         {
           colorNum[row][0] = (int)(Math.random()*6);
         }
+      }
+      
+      //Make sure players start with different initial colors
+      while(colorNum[height-1][0] == colorNum[0][width-1] || colorNum[height-1][0] == colorNum[height-2][0])
+      {
+        colorNum[height-1][0] = (int)(Math.random()*6);
       }
       
       for(int row = 1; row < height; row++)
@@ -65,12 +72,6 @@ public class NEWFillerServer {
             colorNum[row][col] = (int)(Math.random()*6);
           }
         }
-      }
-      
-      //Make sure players start with different initial colors
-      while(colorNum[height-1][0] == colorNum[0][width-1])
-      {
-        colorNum[0][width-1] = (int)(Math.random()*6);
       }
       
       return colorNum;
