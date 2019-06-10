@@ -122,6 +122,7 @@ class Game extends GameLogic
         player.opponent.setScore(score2);
         
         //Test for Winner
+        /*
         int wins1 = 0;
         int wins2 = 0;
         
@@ -167,7 +168,7 @@ class Game extends GameLogic
           player.output.println("TIE");
           player.opponent.output.println("TIE");
         }
-        
+        */
         //Switch Turns
         currentPlayer = currentPlayer.opponent;
         
@@ -361,6 +362,30 @@ class Game extends GameLogic
           output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
           opponent.output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
           
+          // Test for winner          
+          if (currentIsWinner()) {
+            System.out.println("WINNER: " + currentPlayer.getMark());
+            currentPlayer.addWin();
+            setWins();
+            
+            currentPlayer.processWinner();
+          }
+          else if (currentIsLoser()) {
+            System.out.println("LOSER: " + currentPlayer.getMark());
+            currentPlayer.opponent.addWin();
+            setWins();
+            
+            currentPlayer.opponent.processWinner();
+          }
+          else if (isTie()) 
+          {
+            currentPlayer.output.println("REPAINT");
+            currentPlayer.opponent.output.println("REPAINT");
+            
+            currentPlayer.output.println("TIE");
+            currentPlayer.opponent.output.println("TIE");
+          }
+          
           opponent.output.println("OPPONENT_MOVED " + color);
         }
         
@@ -368,6 +393,22 @@ class Game extends GameLogic
         {
           output.println("MESSAGE " + e.getMessage());
         }
+      }
+      
+      private void setWins() {
+        int wins1 = 0;
+        int wins2 = 0;
+        
+        if (currentPlayer.getMark() == '1') {
+          wins1 = currentPlayer.getWins();
+          wins2 = currentPlayer.opponent.getWins();
+        }
+        else {
+          wins1 = currentPlayer.opponent.getWins();
+          wins2 = currentPlayer.getWins();
+        }
+        currentPlayer.processWinsCommand(wins1 + "-" + wins2);
+        currentPlayer.opponent.processWinsCommand(wins1 + "-" + wins2);
       }
       
       private void processUsernameCommand(String message)
