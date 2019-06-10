@@ -17,8 +17,8 @@ class Game extends GameLogic
 
     Player currentPlayer;
     
-    private static int height = NEWFillerClient.HEIGHT;
-    private static int width = NEWFillerClient.WIDTH;
+    private static int height = FillerClient.HEIGHT;
+    private static int width = FillerClient.WIDTH;
     
     public Game(int[][] colors, int[][] status) 
     {

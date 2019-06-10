@@ -1,7 +1,7 @@
 class GameLogic 
 {
-  private static int height = NEWFillerClient.HEIGHT;
-  private static int width = NEWFillerClient.WIDTH;
+  private static int height = FillerClient.HEIGHT;
+  private static int width = FillerClient.WIDTH;
 
   public void logic(int[][] colorInts, int[][] statusInts, int playerStatus, int theColor)
   {

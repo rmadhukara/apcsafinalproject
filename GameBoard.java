@@ -10,9 +10,9 @@ import java.awt.Canvas;
 public class GameBoard extends Canvas
 {
     private Block[][] grid;
-    private static int height = NEWFillerClient.HEIGHT;
-    private static int width = NEWFillerClient.WIDTH;
-    private static Color[] colors = NEWFillerClient.COLORS;
+    private static int height = FillerClient.HEIGHT;
+    private static int width = FillerClient.WIDTH;
+    private static Color[] colors = FillerClient.COLORS;
     
     private String user1;
     private String user2;
