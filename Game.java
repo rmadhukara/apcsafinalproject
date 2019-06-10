@@ -57,15 +57,6 @@ class Game extends GameLogic
           currentPlayer.getScore() > currentPlayer.opponent.getScore());
     }
     
-    public boolean currentIsWinner() 
-    {
-      return boardFilledUp() && (currentPlayer.getScore() > currentPlayer.opponent.getScore());
-    }
-    
-    public boolean currentIsLoser() {
-      return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore());
-    }
-    
     public boolean isTie() {
       return boardFilledUp() && currentPlayer.getScore() == currentPlayer.opponent.getScore();
     }
@@ -315,21 +306,10 @@ class Game extends GameLogic
           opponent.output.println("UPDATE_SCORE " + getScore() + "-" + opponent.getScore());
           
           // Test for winner          
-          if (currentIsWinner()) {
+          if (hasWinner()) {
             currentPlayer.addWin();
             setWins();
-            
-            currentPlayer.output.println("VICTORY");
-            currentPlayer.opponent.output.println("DEFEAT"); 
-            //currentPlayer.processWinner();
-          }
-          else if (currentIsLoser()) {
-            currentPlayer.opponent.addWin();
-            setWins();
-            
-            currentPlayer.output.println("DEFEAT");
-            currentPlayer.opponent.output.println("VICTORY"); 
-            //currentPlayer.opponent.processWinner();
+            currentPlayer.processWinner();
           }
           else if (isTie()) 
           {
@@ -352,7 +332,6 @@ class Game extends GameLogic
       private void setWins() {
         int wins1 = 0;
         int wins2 = 0;
-        System.out.println(getMark());
         
         if (getMark() == '1') {
           wins1 = getWins();
