@@ -59,7 +59,6 @@ public class NEWFillerClient {
       
       while (file.hasNextLine()) {
         String read = file.nextLine();
-        System.out.println(read);
         
         if(read.indexOf(username) > -1) {
           wins = Integer.parseInt(read.substring(read.indexOf(" ") + 1));

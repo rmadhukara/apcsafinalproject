@@ -121,54 +121,6 @@ class Game extends GameLogic
         player.setScore(score1);
         player.opponent.setScore(score2);
         
-        //Test for Winner
-        /*
-        int wins1 = 0;
-        int wins2 = 0;
-        
-        if (currentIsWinner()) {
-          System.out.println("WINNER: " + player.getMark());
-          player.addWin();
-          
-          if (player.getMark() == '1') {
-            wins1 = player.getWins();
-            wins2 = player.opponent.getWins();
-          }
-          else {
-            wins1 = player.opponent.getWins();
-            wins2 = player.getWins();
-          }
-          player.processWinsCommand(wins1 + "-" + wins2);
-          player.opponent.processWinsCommand(wins1 + "-" + wins2);
-          
-          player.processWinner();
-        }
-        else if (currentIsLoser()) {
-          System.out.println("LOSER: " + player.getMark());
-          player.opponent.addWin();
-          
-          if (player.getMark() == '1') {
-            wins1 = player.getWins();
-            wins2 = player.opponent.getWins();
-          }
-          else {
-            wins1 = player.opponent.getWins();
-            wins2 = player.getWins();
-          }
-          player.processWinsCommand(wins1 + "-" + wins2);
-          player.opponent.processWinsCommand(wins1 + "-" + wins2);
-          
-          player.opponent.processWinner();
-        }
-        else if (isTie()) 
-        {
-          player.output.println("REPAINT");
-          player.opponent.output.println("REPAINT");
-          
-          player.output.println("TIE");
-          player.opponent.output.println("TIE");
-        }
-        */
         //Switch Turns
         currentPlayer = currentPlayer.opponent;
         
@@ -364,18 +316,20 @@ class Game extends GameLogic
           
           // Test for winner          
           if (currentIsWinner()) {
-            System.out.println("WINNER: " + currentPlayer.getMark());
             currentPlayer.addWin();
             setWins();
             
-            currentPlayer.processWinner();
+            currentPlayer.output.println("VICTORY");
+            currentPlayer.opponent.output.println("DEFEAT"); 
+            //currentPlayer.processWinner();
           }
           else if (currentIsLoser()) {
-            System.out.println("LOSER: " + currentPlayer.getMark());
             currentPlayer.opponent.addWin();
             setWins();
             
-            currentPlayer.opponent.processWinner();
+            currentPlayer.output.println("DEFEAT");
+            currentPlayer.opponent.output.println("VICTORY"); 
+            //currentPlayer.opponent.processWinner();
           }
           else if (isTie()) 
           {
@@ -398,17 +352,18 @@ class Game extends GameLogic
       private void setWins() {
         int wins1 = 0;
         int wins2 = 0;
+        System.out.println(getMark());
         
-        if (currentPlayer.getMark() == '1') {
-          wins1 = currentPlayer.getWins();
-          wins2 = currentPlayer.opponent.getWins();
+        if (getMark() == '1') {
+          wins1 = getWins();
+          wins2 = opponent.getWins();
         }
         else {
-          wins1 = currentPlayer.opponent.getWins();
-          wins2 = currentPlayer.getWins();
+          wins1 = opponent.getWins();
+          wins2 = getWins();
         }
-        currentPlayer.processWinsCommand(wins1 + "-" + wins2);
-        currentPlayer.opponent.processWinsCommand(wins1 + "-" + wins2);
+        processWinsCommand(wins1 + "-" + wins2);
+        opponent.processWinsCommand(wins1 + "-" + wins2);
       }
       
       private void processUsernameCommand(String message)
