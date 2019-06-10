@@ -17,6 +17,9 @@ class Game extends GameLogic
 
     Player currentPlayer;
     
+    private static int height = NEWFillerClient.HEIGHT;
+    private static int width = NEWFillerClient.WIDTH;
+    
     public Game(int[][] colors, int[][] status) 
     {
       colorNum = colors;
@@ -48,14 +51,20 @@ class Game extends GameLogic
       }
     }
     
+    public boolean hasWinner()
+    {
+      return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore() || 
+          currentPlayer.getScore() > currentPlayer.opponent.getScore());
+    }
+    /*
     public boolean isWinner() 
     {
       return boardFilledUp() && (currentPlayer.getScore() < currentPlayer.opponent.getScore());
-    }
-    
+    }*/
+    /*
     public boolean isLoser() {
       return boardFilledUp() && (currentPlayer.getScore() > currentPlayer.opponent.getScore());
-    }
+    }*/
     
     public boolean isTie() {
       return boardFilledUp() && currentPlayer.getScore() == currentPlayer.opponent.getScore();
@@ -106,26 +115,34 @@ class Game extends GameLogic
 
         turnArrayToString();
         
-        int score1 = 0;
-        int score2 = 0;
-
-        for (int row = 0; row < statusNum.length; row++)
-        {
-          for (int col = 0; col < statusNum[0].length; col++)
-          {
-            if (statusNum[row][col] == 1)
-            {
-              score1++;
-            }
-            else if (statusNum[row][col] == 2)
-            {
-              score2++;
-            }
-          } 
-        }        
+        //Calculate scores
+        int score1 = countScore(statusNum, 1);
+        int score2 = countScore(statusNum, 2);
         player.setScore(score1);
         player.opponent.setScore(score2);
-
+        
+        //Test for Winner
+        if (hasWinner())
+        {
+          if (player.getScore() > player.opponent.getScore()) {
+            player.setWins(player.getWins() + 1);
+            player.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
+            player.opponent.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
+            player.processWinner();
+          }
+          else {
+            player.opponent.setWins(player.opponent.getWins() + 1);
+            player.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
+            player.opponent.processWinsCommand(player.getWins() + "-" + player.opponent.getWins());
+            player.opponent.processWinner();
+          }
+        }
+        else if (isTie()) 
+        {
+          player.output.println("TIE");
+          player.opponent.output.println("TIE");
+        }
+        
         //Switch Turns
         currentPlayer = currentPlayer.opponent;
         
@@ -279,12 +296,19 @@ class Game extends GameLogic
               int wins1 = opponent.getWins();
               int wins2 = getWins();
               
+              //Set usernames
               opponent.processUsernameCommand(user1 + "-" + user2);
               processUsernameCommand(user1 + "-" + user2);
               
+              //Set wins
               opponent.processWinsCommand(wins1 + "-" + wins2);
               processWinsCommand(wins1 + "-" + wins2);
               
+              //Set current color
+              opponent.setCurrentColor(colorNum[height-1][0]);
+              setCurrentColor(colorNum[0][width-1]);
+              
+              //finish setup
               setUp = false;
             }
           }
@@ -309,6 +333,26 @@ class Game extends GameLogic
           
           opponent.output.println("OPPONENT_MOVED " + color);
           
+          //Update wins: wins1-wins2
+          /*
+          if (hasWinner())
+          {
+            if (getScore() > opponent.getScore()) {
+              setWins(getWins() + 1);
+              processWinsCommand(getWins() + "-" + opponent.getWins());
+              
+              output.println("VICTORY");
+              opponent.output.println("DEFEAT"); 
+            }
+            else {
+              opponent.setWins(opponent.getWins() + 1);
+              processWinsCommand(getWins() + "-" + opponent.getWins());
+              
+              output.println("DEFEAT");
+              opponent.output.println("VICTORY");
+            }
+          }*/
+          /*
           if (isWinner()) 
           {
             setWins(getWins() + 1);
@@ -316,7 +360,8 @@ class Game extends GameLogic
             
             output.println("VICTORY");
             opponent.output.println("DEFEAT");  
-          }
+          }*/
+          /*
           else if (isLoser()) {
             opponent.setWins(opponent.getWins() + 1);
             updateWins();
@@ -328,19 +373,13 @@ class Game extends GameLogic
           {
             output.println("TIE");
             opponent.output.println("TIE");
-          }
+          }*/
         } 
         
         catch (IllegalStateException e) 
         {
           output.println("MESSAGE " + e.getMessage());
         }
-      }
-      
-      private void updateWins() {
-        //Update wins: wins1-wins2
-        output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
-        opponent.output.println("UPDATE_WINS " + getWins() + "-" + opponent.getWins());
       }
       
       private void processUsernameCommand(String message)
@@ -360,6 +399,19 @@ class Game extends GameLogic
         try 
         {
           output.println("UPDATE_WINS " + message);
+        } 
+        catch (IllegalStateException e) 
+        {
+          output.println("MESSAGE " + e.getMessage());
+        }
+      }
+      
+      private void processWinner()
+      {
+        try 
+        {
+          output.println("VICTORY");
+          opponent.output.println("DEFEAT"); 
         } 
         catch (IllegalStateException e) 
         {

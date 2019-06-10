@@ -51,5 +51,21 @@ class GameLogic
         } 
       }
   }
-      
+  
+  public int countScore(int[][] statusNum, int mark) {
+    int score = 0;
+    
+    for (int row = 0; row < statusNum.length; row++)
+    {
+      for (int col = 0; col < statusNum[0].length; col++)
+      {
+        if (statusNum[row][col] == mark)
+        {
+          score++;
+        }
+      } 
+    }
+    
+    return score;
+  }
 }

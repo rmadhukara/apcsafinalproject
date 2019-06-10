@@ -33,7 +33,7 @@ public class NEWFillerServer {
     private static int height = NEWFillerClient.HEIGHT;
     private static int width = NEWFillerClient.WIDTH;
     
-    public static int[][] setColorNum() {
+    private static int[][] setColorNum() {
       int[][] colorNum = new int[height][width];
       
       colorNum[0][0] = (int)(Math.random()*6);
@@ -76,7 +76,7 @@ public class NEWFillerServer {
       return colorNum;
     }
     
-    public static int[][] setStatusNum() {
+    private static int[][] setStatusNum() {
       int[][] statusNum = new int[height][width];
       statusNum[height-1][0] = 1;
       statusNum[0][width-1] = 2;
