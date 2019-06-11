@@ -9,13 +9,10 @@ CLASSES = \
 	Block.java \
 	GameBoard.java \
 	Panel.java \
-	NEWFillerClient.java \
-	NEWFillerServer.java \
+	FillerClient.java \
+	FillerServer.java \
 	Game.java \
 	GameLogic.java
-	#Filler.java \
-	#Player.java \
-	#Playerable.java \
 
 default: classes
 
